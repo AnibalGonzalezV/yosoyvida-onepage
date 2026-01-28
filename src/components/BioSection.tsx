@@ -3,22 +3,18 @@ export function BioSection() {
   return (
     <section id="sobre-mi" className="bg-cream py-16 md:py-24 lg:py-32 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto">
-        {/* Agregado 'items-center' para centrar verticalmente imagen y texto */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           
-          {/* FOTO 1: Ahora permitimos que sea más grande */}
           <div className="relative flex justify-center lg:justify-start order-2 lg:order-1">
-            {/* Cambiado max-w-md a max-w-lg (más grande) y w-full */}
             <div className="relative w-full max-w-lg aspect-[3/4]">
               <img
-                src="/images/bio-transparent.png" 
+                src="/images/bio-transparent.webp" 
                 alt="Retrato de la coach"
                 className="w-full h-full object-contain drop-shadow-xl hover:scale-[1.02] transition-transform duration-500" 
               />
             </div>
           </div>
 
-          {/* Texto: Ahora tiene más presencia */}
           <div className="space-y-8 order-1 lg:order-2">
             <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-dark-brown leading-tight text-balance">
               Underneath worry, desire...

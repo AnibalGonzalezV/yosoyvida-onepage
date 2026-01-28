@@ -47,7 +47,7 @@ export function TherapiesSection() {
              {/* La Foto Ovalada */}
              <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
                 <img 
-                  src="/images/therapies-oval.png" 
+                  src="/images/therapies-oval.webp" 
                   alt="Terapia Integral"
                   className="w-full max-w-md lg:max-w-lg object-contain drop-shadow-2xl hover:brightness-110 transition duration-500"
                 />

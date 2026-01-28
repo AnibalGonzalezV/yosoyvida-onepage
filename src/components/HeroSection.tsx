@@ -5,8 +5,6 @@ const WAVE_PATH = "M0,96L48,96C96,96,192,96,288,112C384,128,480,160,576,192C672,
 
 export function HeroSection() {
   return (
-    // CAMBIO: h-[60vh] reduce considerablemente la altura visual
-    // min-h-[450px] asegura que el texto no quede apretado
     <section className="relative w-full h-[60vh] min-h-[450px]">
       
       {/* Imagen de Fondo */}
@@ -16,13 +14,11 @@ export function HeroSection() {
           alt="Serene lifestyle scene"
           className="w-full h-full object-cover"
         />
-        {/* Overlay mantenido igual */}
         <div className="absolute inset-0 bg-dark-brown/30" />
       </div>
 
       {/* Texto Centrado */}
       <div className="absolute inset-0 flex items-center justify-center z-10 px-4">
-        {/* Reduje ligeramente el texto en móviles para que encaje mejor en el espacio reducido */}
         <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-cream text-center tracking-wide leading-tight drop-shadow-lg">
           UNEARTH
           <br />
@@ -31,7 +27,6 @@ export function HeroSection() {
       </div>
 
       {/* SVG WAVE DIVIDER (Transición a Cream) */}
-      {/* Ajusté height a h-[40px] md:h-[80px] para que la ola no sea tan invasiva en un hero más pequeño */}
       <WaveDivider path={WAVE_PATH} className="text-cream" height="h-[40px] md:h-[80px]" />
     </section>
   )

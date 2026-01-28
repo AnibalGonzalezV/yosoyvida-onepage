@@ -39,7 +39,7 @@ export function PillarsSection() {
           {/* Columna Derecha: FOTO 4 (Pies/Horizontal) */}
           <div className="relative w-full flex items-center justify-center lg:justify-end">
              <img
-                src="/images/pillars-feet.png" 
+                src="/images/pillars-feet.webp" 
                 alt="Conexión con la tierra"
                 // Eliminado max-h fijo, ahora usa w-full para aprovechar el ancho
                 className="w-full h-auto object-contain drop-shadow-2xl hover:scale-[1.01] transition-transform duration-500"

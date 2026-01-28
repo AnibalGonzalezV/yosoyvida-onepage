@@ -33,9 +33,9 @@ export function CoursesSection() {
           </div>
 
           {/* Columna Derecha: FOTO 2 (Reiki) */}
-          <div className="relative bg-terracotta/10 min-h-[300px] lg:min-h-full flex items-center justify-center p-8">
+          <div className="relative bg-terracotta/40 min-h-[300px] lg:min-h-full flex items-center justify-center p-8">
              <img 
-               src="/images/reiki-transparent.png" 
+               src="/images/reiki-transparent.webp" 
                alt="Curso de Reiki"
                className="w-full h-auto object-contain drop-shadow-lg transform hover:scale-105 transition duration-700"
              />

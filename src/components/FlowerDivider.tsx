@@ -13,7 +13,7 @@ export function FlowerDivider() {
       {/* Imagen de Fondo Parallax */}
       <div 
         className="absolute inset-0 bg-fixed bg-center bg-cover"
-        style={{ backgroundImage: "url('/images/flowers-bg.jpg')" }} 
+        style={{ backgroundImage: "url('/images/flowers-bg.webp')" }} 
       />
       
       {/* Ola Superior (Apunta hacia abajo) */}
