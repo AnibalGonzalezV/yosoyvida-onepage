@@ -1,7 +1,7 @@
 import { MessageCircle, Dna, Zap, Heart } from "lucide-react"
 
 const pillars = [
-  { icon: MessageCircle, title: "Conversación", description: "Diálogo profundo para descubrir tus verdaderas necesidades." },
+  { icon: MessageCircle, title: "Conversación Consciente", description: "Diálogo profundo para descubrir tus verdaderas necesidades." },
   { icon: Dna, title: "Biodescodificación", description: "Descubre el origen emocional de tus síntomas físicos." },
   { icon: Zap, title: "Chequeo Energético", description: "Medición y análisis de tu campo energético para identificar bloqueos." },
   { icon: Heart, title: "Bienestar Integral", description: "Equilibrio físico, emocional y espiritual para una vida plena." },
@@ -9,7 +9,8 @@ const pillars = [
 
 export function PillarsSection() {
   return (
-    <section className="bg-cream py-16 md:py-24 px-6 md:px-12">
+    // CORREGIDO: Aseguramos el margen negativo
+    <section className="bg-cream py-16 md:py-24 px-6 md:px-12 -mt-[2px] relative z-10">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16 md:mb-20">
           <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-dark-brown mb-6">
@@ -20,10 +21,7 @@ export function PillarsSection() {
           </p>
         </div>
 
-        {/* Layout de 2 Columnas */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          
-          {/* Columna Izquierda: Grilla de Iconos */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">
             {pillars.map((pillar, index) => (
               <div key={index} className="text-center p-6 rounded-xl hover:bg-white/60 transition duration-300">
@@ -36,16 +34,13 @@ export function PillarsSection() {
             ))}
           </div>
 
-          {/* Columna Derecha: FOTO 4 (Pies/Horizontal) */}
           <div className="relative w-full flex items-center justify-center lg:justify-end">
              <img
                 src="/images/pillars-feet.webp" 
                 alt="Conexión con la tierra"
-                // Eliminado max-h fijo, ahora usa w-full para aprovechar el ancho
                 className="w-full h-auto object-contain drop-shadow-2xl hover:scale-[1.01] transition-transform duration-500"
               />
           </div>
-
         </div>
       </div>
     </section>

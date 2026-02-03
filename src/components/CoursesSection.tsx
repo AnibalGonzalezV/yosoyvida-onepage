@@ -1,14 +1,12 @@
 import { Sparkles } from "lucide-react"
 
-
 export function CoursesSection() {
   return (
-    // Quitamos 'relative' ya que no hay ola absoluta aquí
-    <section id="cursos" className="bg-[#E8DED5] py-16 md:py-24 px-6 md:px-12">
+    // CORREGIDO: -mt-[2px] y z-10
+    <section id="cursos" className="bg-[#E8DED5] py-16 md:py-24 px-6 md:px-12 -mt-[2px] relative z-10">
       <div className="max-w-7xl mx-auto"> 
         <div className="bg-cream rounded-2xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2">
           
-          {/* Columna Izquierda: Texto */}
           <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-6">
               <Sparkles className="w-6 h-6 text-terracotta" />
@@ -32,7 +30,6 @@ export function CoursesSection() {
             </a>
           </div>
 
-          {/* Columna Derecha: FOTO 2 (Reiki) */}
           <div className="relative bg-terracotta/40 min-h-[300px] lg:min-h-full flex items-center justify-center p-8">
              <img 
                src="/images/reiki-transparent.webp" 

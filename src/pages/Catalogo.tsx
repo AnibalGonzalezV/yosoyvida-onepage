@@ -1,120 +1,143 @@
-import { MessageCircle, Star } from "lucide-react"
+import { useState, useMemo } from "react"
+import { Star, Eye, Sparkles, BookOpen } from "lucide-react"
 import { FooterSection } from "../components/FooterSection"
 import { WaveDivider } from "../components/WaveDivider"
+import { ProductModal } from "../components/ProductModal" 
+import { topProducts, generalCatalog, type Product } from "../data/product"
 
-const WHATSAPP_NUMBER = "56912345678" // Configura tu número aquí
-
-// Olas específicas para esta página
-// SVG6 (Hero -> Favoritos): Transición hacia color Muted (#E8DED5)
+// Olas Decorativas
 const HERO_WAVE = "M0,224L48,202.7C96,181,192,139,288,122.7C384,107,480,117,576,144C672,171,768,213,864,197.3C960,181,1056,107,1152,85.3C1248,64,1344,96,1392,112L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-
-// SVG7 (Favoritos -> Todos): Transición hacia color Cream (#F9F4EF)
 const MID_WAVE = "M0,224L48,213.3C96,203,192,181,288,186.7C384,192,480,224,576,208C672,192,768,128,864,122.7C960,117,1056,171,1152,170.7C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 
-
-const topProducts = [
-  { id: 1, name: "Esencia Floral Calma", price: "$12.990", image: "/images/products/product-1.jpg", bestseller: true },
-  { id: 2, name: "Té Herbal Serenidad", price: "$8.990", image: "/images/products/product-2.jpg", bestseller: true },
-  { id: 3, name: "Aceite Corporal Bienestar", price: "$18.990", image: "/images/products/product-5.jpg", bestseller: true },
-  { id: 4, name: "Cristales Sanadores", price: "$22.990", image: "/images/products/product-7.jpg", bestseller: true },
-  { id: 5, name: "Vela Aromática Paz", price: "$14.990", image: "/images/products/product-4.jpg", bestseller: true },
-]
-
-const allProducts = [
-  { id: 11, name: "Aceite Esencial Eucalipto", price: "$10.990", image: "/images/products/product-1.jpg" },
-  { id: 12, name: "Té Relajante Noche", price: "$8.490", image: "/images/products/product-2.jpg" },
-  { id: 13, name: "Jabón de Avena", price: "$5.990", image: "/images/products/product-3.jpg" },
-  { id: 14, name: "Vela de Soya Rosa", price: "$12.990", image: "/images/products/product-4.jpg" },
-  { id: 15, name: "Aceite de Almendras", price: "$16.990", image: "/images/products/product-5.jpg" },
-  { id: 16, name: "Sahumerio Palo Santo", price: "$7.990", image: "/images/products/product-6.jpg" },
-  { id: 17, name: "Amatista Natural", price: "$28.990", image: "/images/products/product-7.jpg" },
-  { id: 18, name: "Bálsamo Labial Natural", price: "$4.990", image: "/images/products/product-8.jpg" },
-]
-
-interface ProductCardProps {
-  product: {
-    id: number
-    name: string
-    price: string
-    image: string
-    bestseller?: boolean
-  }
-  featured?: boolean
+// --- COMPONENTE TARJETA (Local) ---
+interface CardProps {
+  product: Product;
+  onOpen: (p: Product) => void;
 }
 
-function ProductCard({ product, featured = false }: ProductCardProps) {
+function ProductCard({ product, onOpen }: CardProps) {
+  const isBook = product.type === 'book';
+  
   return (
-    <div className={`group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${featured ? "ring-2 ring-terracotta ring-offset-2 ring-offset-muted" : "border border-black/5"}`}>
-      <div className="relative aspect-square overflow-hidden bg-gray-100">
+    <div 
+      onClick={() => onOpen(product)}
+      className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full border border-black/5 cursor-pointer relative"
+    >
+      {/* Imagen */}
+      <div className={`relative overflow-hidden bg-gray-50 ${isBook ? "aspect-[3/4]" : "aspect-square"}`}>
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          className="w-full h-full object-contain p-5 group-hover:scale-105 transition-transform duration-700"
         />
+        
+        {/* Badges */}
         {product.bestseller && (
           <div className="absolute top-3 left-3 bg-terracotta text-cream text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-md z-10">
             <Star className="w-3 h-3 fill-current" />
-            <span>FAVORITO</span>
+            <span className="hidden sm:inline">FAVORITO</span>
           </div>
         )}
-        {/* Overlay rápido al hacer hover */}
-        <div className="absolute inset-0 bg-dark-brown/0 group-hover:bg-dark-brown/10 transition-colors duration-300" />
+        {isBook && (
+           <div className="absolute top-3 right-3 bg-white/90 text-dark-brown text-xs font-bold px-2 py-1 rounded flex items-center gap-1 shadow-sm z-10">
+             <BookOpen className="w-3 h-3" />
+             <span>LIBRO</span>
+           </div>
+        )}
+        
+        {/* Overlay "Ver Detalle" */}
+        <div className="absolute inset-0 bg-dark-brown/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1px]">
+           <div className="bg-white text-dark-brown px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">
+             <Eye className="w-4 h-4" /> Ver Detalle
+           </div>
+        </div>
       </div>
       
-      <div className="p-5">
-        <h3 className="font-serif text-lg text-dark-brown mb-1 line-clamp-2 leading-tight group-hover:text-earthy-brown transition-colors">
+      {/* Info Resumida */}
+      <div className="p-5 flex flex-col flex-grow">
+        <h3 className="font-serif text-lg text-dark-brown mb-1 line-clamp-1 group-hover:text-terracotta transition-colors">
           {product.name}
         </h3>
-        <p className="font-sans text-earthy-brown font-bold text-lg mb-4">{product.price}</p>
+        {isBook && <p className="text-xs text-dark-brown/50 uppercase mb-1">{product.author}</p>}
         
-        <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Me interesa el producto: ${product.name}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 bg-[#25D366] text-white text-sm font-medium px-4 py-2.5 rounded-full hover:bg-[#128C7E] transition-all duration-300 w-full hover:shadow-md active:scale-95"
-        >
-          <MessageCircle className="w-4 h-4" />
-          <span>Consultar</span>
-        </a>
+        <p className="font-sans text-sm text-dark-brown/60 mb-4 line-clamp-2 leading-relaxed">
+            {product.shortDescription}
+        </p>
+        
+        <div className="mt-auto flex items-center justify-between border-t border-gray-50 pt-3">
+            <p className="font-sans text-earthy-brown font-bold text-lg">
+                {product.price}
+            </p>
+            <span className="text-xs font-bold text-terracotta uppercase tracking-wider group-hover:underline">
+                + Info
+            </span>
+        </div>
       </div>
     </div>
   )
 }
 
+// --- PÁGINA PRINCIPAL ---
 export default function CatalogoPage() {
+  const [filter, setFilter] = useState<'all' | 'product' | 'book'>('all');
+  const [visibleCount, setVisibleCount] = useState(8); 
+  
+  // Estado para el Modal
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Filtrado
+  const filteredItems = useMemo(() => {
+    if (filter === 'all') return generalCatalog;
+    return generalCatalog.filter(item => item.type === filter);
+  }, [filter]);
+
+  // Paginación
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const hasMore = visibleItems.length < filteredItems.length;
+
+  // Handlers
+  const openModal = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  }
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedProduct(null), 300); // Limpia data después de cerrar
+  }
+  const handleFilterChange = (newFilter: 'all' | 'product' | 'book') => {
+      setFilter(newFilter);
+      setVisibleCount(8); 
+  };
+
   return (
     <main className="min-h-screen bg-cream animate-fade-in">
       
-      {/* --- HERO SECTION --- */}
+      {/* HERO SECTION */}
       <section className="relative w-full h-[50vh] min-h-[400px] flex items-center justify-center">
-        {/* Imagen de Fondo (Reutilizamos la de productos o una nueva de textura) */}
         <div className="absolute inset-0">
              <img 
-               src="/images/hero-lifestyle2.jpg" // O una imagen de "ingredientes" o "botellas"
+               src="/images/hero-lifestyle2.jpg" 
                alt="Productos Naturales"
                className="w-full h-full object-cover"
              />
              <div className="absolute inset-0 bg-dark-brown/40 backdrop-blur-[2px]" />
         </div>
-
-        {/* Contenido del Hero */}
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
             <span className="block font-sans uppercase tracking-[0.2em] text-cream/80 text-sm mb-4 animate-fade-in">
               Bienestar & Armonía
             </span>
             <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-cream mb-6 drop-shadow-lg">
-              Nuestros Productos
+              Catálogo Integral
             </h1>
             <p className="font-sans text-lg md:text-xl text-cream/90 max-w-2xl mx-auto leading-relaxed">
-               Una cuidadosa selección de elementos naturales para acompañar tu proceso de sanación, limpieza y conexión espiritual.
+               Una cuidadosa selección de elementos naturales y sabiduría escrita para acompañar tu proceso.
             </p>
         </div>
-
-        {/* OLA DE TRANSICIÓN (Hacia sección beige "Favoritos") */}
         <WaveDivider path={HERO_WAVE} className="text-[#E8DED5]" />
       </section>
 
-      {/* --- SECCIÓN FAVORITOS (Fondo Beige/Muted) --- */}
+      {/* TOP 5 FAVORITOS */}
       <section className="bg-[#E8DED5] py-16 md:py-24 px-6 md:px-12 relative">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-4 mb-12">
@@ -123,37 +146,88 @@ export default function CatalogoPage() {
             </div>
             <div className="text-center md:text-left">
                 <h2 className="font-serif text-3xl md:text-4xl text-dark-brown">Los Favoritos</h2>
-                <p className="text-dark-brown/70 text-sm">Lo más amado por nuestra comunidad</p>
+                <p className="text-dark-brown/70 text-sm">Lo más buscado para tu botiquín natural</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {topProducts.map((product) => (
-              <ProductCard key={product.id} product={product} featured />
+              <ProductCard key={product.id} product={product} onOpen={openModal} />
             ))}
           </div>
         </div>
-
-        {/* OLA DE TRANSICIÓN (Hacia sección Cream "Todos") */}
         <WaveDivider path={MID_WAVE} className="text-cream" />
       </section>
 
-      {/* --- SECCIÓN TODOS LOS PRODUCTOS (Fondo Cream) --- */}
+      {/* CATÁLOGO GENERAL (Con Filtros y Carga Progresiva) */}
       <section className="bg-cream py-16 md:py-24 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-serif text-2xl md:text-3xl text-dark-brown mb-8 pl-4 border-l-4 border-earthy-brown">
-            Catálogo Completo
-          </h2>
+          
+          <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+             <h2 className="font-serif text-2xl md:text-3xl text-dark-brown pl-4 border-l-4 border-earthy-brown">
+                Explora la Colección
+             </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
-            {allProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+             {/* Botones de Filtro */}
+             <div className="flex flex-wrap gap-2 justify-center">
+                {[
+                    { key: 'all', label: 'Ver Todo' },
+                    { key: 'product', label: 'Bienestar' },
+                    { key: 'book', label: 'Libros' }
+                ].map((btn) => (
+                    <button
+                        key={btn.key}
+                        onClick={() => handleFilterChange(btn.key as any)}
+                        className={`px-5 py-2 rounded-full text-sm font-sans uppercase tracking-wider transition-all duration-300 ${
+                            filter === btn.key 
+                            ? "bg-terracotta text-cream shadow-md transform scale-105 font-bold" 
+                            : "bg-white text-dark-brown border border-dark-brown/10 hover:border-terracotta"
+                        }`}
+                    >
+                        {btn.label}
+                    </button>
+                ))}
+             </div>
+          </div>
+
+          {/* Grid Dinámico */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8 mb-12 animate-fade-in">
+            {visibleItems.map((product) => (
+              <ProductCard key={product.id} product={product} onOpen={openModal} />
             ))}
           </div>
+
+          {/* Botón "Cargar Más" */}
+          {hasMore && (
+              <div className="flex justify-center pt-8">
+                  <button 
+                    onClick={() => setVisibleCount(prev => prev + 8)}
+                    className="group flex flex-col items-center gap-2 text-dark-brown hover:text-terracotta transition-colors duration-300"
+                  >
+                      <span className="font-sans text-sm uppercase tracking-widest font-bold">Ver más</span>
+                      <div className="p-3 rounded-full bg-white border border-dark-brown/10 shadow-sm group-hover:shadow-md group-hover:border-terracotta transition-all animate-bounce-slow">
+                        <Sparkles className="w-5 h-5" />
+                      </div>
+                  </button>
+              </div>
+          )}
+
+           {!hasMore && visibleItems.length > 0 && (
+               <p className="text-center text-dark-brown/40 text-sm mt-8 font-cursive">
+                   Fin de la colección ✨
+               </p>
+           )}
         </div>
       </section>
 
       <FooterSection topWaveColor="text-cream" />
+
+      {/* MODAL GLOBAL */}
+      <ProductModal 
+        product={selectedProduct} 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+      />
     </main>
   )
 }

@@ -9,25 +9,33 @@ const BOTTOM_WAVE = "M0,32L48,53.3C96,75,192,117,288,149.3C384,181,480,203,576,1
 export function FlowerDivider2() {
   return (
     <div 
-      className="relative w-full h-[300px] md:h-[500px]"
+      // CORRECCIÓN 1: -mt-[2px] y z-0
+      className="relative w-full h-[300px] md:h-[500px] -mt-[2px] z-0"
       style={{ clipPath: "inset(0)" }} 
     >
       
       {/* Imagen de Fondo 2 */}
       <div className="fixed inset-0 w-full h-full">
         <img 
-          src="/images/divider-bg-2.jpg" // <--- ¡Sube tu segunda imagen con este nombre!
+          src="/images/divider-bg-2.jpg"
           alt="Flowers Background 2"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-dark-brown/10" />
       </div>
       
-      {/* Ola Superior (Color Cream -> Conecta con About Me) */}
-      <WaveDivider path={TOP_WAVE} className="text-cream" position="top" />
+      {/* Ola Superior (Color Cream) */}
+      {/* CORRECCIÓN 2: scale-y-105 */}
+      <div className="absolute top-0 w-full transform origin-top scale-y-105">
+        <WaveDivider path={TOP_WAVE} className="text-cream" position="top" />
+      </div>
 
-      {/* Ola Inferior (Color Terracotta -> Conecta con Productos) */}
-      <WaveDivider path={BOTTOM_WAVE} className="text-terracotta" position="bottom" />
+      {/* Ola Inferior (Color Terracotta) */}
+      {/* CORRECCIÓN 3: scale-y-105 */}
+      <div className="absolute bottom-0 w-full transform origin-bottom scale-y-105">
+        <WaveDivider path={BOTTOM_WAVE} className="text-terracotta" position="bottom" />
+      </div>
+      
     </div>
   )
 }

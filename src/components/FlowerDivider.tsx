@@ -9,31 +9,33 @@ const BOTTOM_WAVE = "M0,32L48,53.3C96,75,192,117,288,149.3C384,181,480,203,576,1
 export function FlowerDivider() {
   return (
     <div 
-      className="relative w-full h-[300px] md:h-[500px]"
-      // ESTE ES EL TRUCO: 
-      // clipPath obliga al contenido 'fixed' a verse SOLO dentro de este div.
-      // Así evitamos que la imagen tape toda la web, pero mantenemos el efecto quieto.
+      // CORRECCIÓN 1: Agregamos -mt-[2px] y z-0 para que quede "apretado" debajo de las secciones vecinas
+      className="relative w-full h-[300px] md:h-[500px] -mt-[2px] z-0"
       style={{ clipPath: "inset(0)" }} 
     >
       
-      {/* Imagen de Fondo (Ahora es una etiqueta IMG, no un div background) */}
+      {/* Imagen de Fondo */}
       <div className="fixed inset-0 w-full h-full">
         <img 
           src="/images/flowers-bg.webp"
           alt="Flowers Background"
-          // fixed: se queda quieta en la pantalla
-          // object-cover: se adapta sin zoom exagerado
           className="w-full h-full object-cover"
         />
-        {/* Capa oscura opcional para que resalten las olas (puedes quitarla si quieres) */}
         <div className="absolute inset-0 bg-dark-brown/10" />
       </div>
       
-      {/* Ola Superior (Apunta hacia abajo) */}
-      <WaveDivider path={TOP_WAVE} className="text-cream" position="top" />
+      {/* Ola Superior */}
+      {/* CORRECCIÓN 2: scale-y-105 estira la ola verticalmente un 5% para tapar huecos sub-píxel */}
+      <div className="absolute top-0 w-full transform origin-top scale-y-105">
+        <WaveDivider path={TOP_WAVE} className="text-cream" position="top" />
+      </div>
 
-      {/* Ola Inferior (Apunta hacia arriba) */}
-      <WaveDivider path={BOTTOM_WAVE} className="text-cream" position="bottom" />
+      {/* Ola Inferior */}
+      {/* CORRECCIÓN 3: scale-y-105 estira la ola desde abajo */}
+      <div className="absolute bottom-0 w-full transform origin-bottom scale-y-105">
+        <WaveDivider path={BOTTOM_WAVE} className="text-cream" position="bottom" />
+      </div>
+      
     </div>
   )
 }
