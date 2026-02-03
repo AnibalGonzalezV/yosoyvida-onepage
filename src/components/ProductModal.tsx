@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom"; // <--- 1. IMPORTANTE: Importamos el Portal
 import { X, MessageCircle, Package, CheckCircle } from "lucide-react";
 import type { Product } from "../data/product";
 
@@ -10,29 +12,45 @@ interface ProductModalProps {
 const WHATSAPP_NUMBER = "56912345678";
 
 export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
-  if (!isOpen || !product) return null;
+  // Estado para asegurar que el componente esté montado antes de usar el portal
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  // Bloqueo de scroll del body
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
+  // Si no está abierto, no hay producto o no está montado, no renderizamos nada
+  if (!isOpen || !product || !mounted) return null;
 
   const paragraphs = product.description.split('\n');
 
-  return (
-    // Z-INDEX ALTO (z-[60]) para estar sobre el Navbar
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 animate-fade-in">
+  // --- 2. LA MAGIA: Usamos createPortal ---
+  // El primer argumento es el JSX de siempre.
+  // El segundo argumento es "document.body", el lugar donde queremos teletransportarlo.
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in">
       
-      {/* Fondo Oscuro Backdrop */}
+      {/* Backdrop (Fondo oscuro) */}
       <div 
         className="absolute inset-0 bg-dark-brown/60 backdrop-blur-sm transition-opacity" 
         onClick={onClose}
       />
 
-      {/* CONTENEDOR PRINCIPAL:
-         - w-[95%]: En móvil ocupa casi todo el ancho.
-         - max-h-[85vh]: Deja espacio arriba y abajo para que no se corte.
-         - flex-col: En móvil es columna (Foto arriba, Texto abajo).
-         - md:flex-row: En escritorio es fila (Foto izq, Texto der).
-      */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-[95%] md:w-full max-w-3xl max-h-[85vh] md:max-h-[90vh] overflow-hidden flex flex-col md:flex-row animate-scale-up">
+      {/* CONTENEDOR DEL MODAL */}
+      <div className="relative bg-white rounded-2xl shadow-2xl w-[95%] md:w-full max-w-3xl max-h-[85vh] md:max-h-[90vh] overflow-hidden flex flex-col md:flex-row animate-scale-up z-[10000]">
         
-        {/* Botón Cerrar (Flotante) */}
+        {/* Botón Cerrar */}
         <button 
           onClick={onClose}
           className="absolute top-3 right-3 z-30 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-gray-100 transition-colors shadow-md border border-gray-100"
@@ -40,12 +58,8 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
           <X className="w-5 h-5 text-dark-brown" />
         </button>
 
-        {/* COLUMNA IMAGEN:
-           - h-48: En móvil altura fija pequeña (aprox 200px) para dejar espacio al texto.
-           - md:h-auto: En escritorio altura automática.
-           - shrink-0: Evita que se aplaste.
-        */}
-        <div className="w-full md:w-2/5 h-52 md:h-auto bg-[#F9F4EF] flex items-center justify-center p-6 shrink-0 relative">
+        {/* COLUMNA IMAGEN */}
+        <div className="w-full md:w-2/5 h-48 md:h-auto bg-[#F9F4EF] flex items-center justify-center p-6 shrink-0 relative">
            <img 
              src={product.image} 
              alt={product.name} 
@@ -53,12 +67,10 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
            />
         </div>
 
-        {/* COLUMNA INFO (Scrollable):
-           - overflow-y-auto: Solo esta parte hace scroll si el texto es largo.
-        */}
+        {/* COLUMNA INFO (Con Scroll) */}
         <div className="w-full md:w-3/5 p-5 md:p-8 flex flex-col overflow-y-auto">
            
-           {/* Header del Producto */}
+           {/* Header */}
            <div className="border-b border-gray-100 pb-3 mb-4">
              <span className="text-terracotta text-[10px] md:text-xs font-bold tracking-widest uppercase mb-1 block">
                {product.type === 'book' ? 'Libro Recomendado' : 'Producto Natural'}
@@ -69,7 +81,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
              <span className="text-lg md:text-xl font-bold text-earthy-brown">{product.price}</span>
            </div>
            
-           {/* INFO TÉCNICA */}
+           {/* Info Técnica */}
            {product.technicalInfo && (
              <div className="bg-earthy-brown/5 p-3 rounded-lg mb-5 flex gap-3 items-start border border-earthy-brown/10">
                 <Package className="w-4 h-4 text-earthy-brown flex-shrink-0 mt-0.5" />
@@ -79,7 +91,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
              </div>
            )}
 
-           {/* DESCRIPCIÓN */}
+           {/* Descripción */}
            <div className="space-y-3 mb-6 text-dark-brown/80 font-sans text-sm leading-relaxed">
              {paragraphs.map((line, index) => (
                line.trim() === "" ? <br key={index}/> : 
@@ -92,7 +104,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
              ))}
            </div>
 
-           {/* FORMATOS */}
+           {/* Formatos */}
            {product.formats && product.formats.length > 0 && (
              <div className="mb-6">
                <h4 className="font-serif text-dark-brown text-sm mb-2 border-l-4 border-terracotta pl-2">
@@ -109,11 +121,10 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
              </div>
            )}
 
-           {/* ESPACIO VACÍO PARA QUE EL TEXTO NO QUEDE TAPADO POR EL BOTÓN FLOTANTE */}
+           {/* Espaciador para no tapar contenido con el botón */}
            <div className="h-16 md:h-0"></div>
 
-           {/* BOTÓN FLOTANTE (Sticky Bottom) */}
-           {/* En móvil se pega abajo para estar siempre accesible */}
+           {/* Botón Flotante */}
            <div className="md:relative fixed bottom-0 left-0 right-0 md:bottom-auto md:left-auto md:right-auto p-4 md:p-0 bg-white md:bg-transparent border-t md:border-t-0 border-gray-100 md:mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-none z-10">
              <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Me interesa: ${product.name}`}
@@ -128,6 +139,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
         </div>
       </div>
-    </div>
-  )
+    </div>,
+    document.body // <--- Aquí termina el Portal: Enviamos todo directo al <body>
+  );
 }
