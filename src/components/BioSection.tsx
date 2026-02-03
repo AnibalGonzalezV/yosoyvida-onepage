@@ -9,7 +9,6 @@ export function BioSection() {
           
           <div className="relative flex justify-center lg:justify-start order-2 lg:order-1">
             <div className="relative w-full max-w-lg aspect-[3/4]">
-              <div className="absolute -bottom-4 -left-4 w-2/3 h-2/3 border border-terracotta/30 rounded-bl-[3rem] -z-10" />
               <img
                 src="/images/reiki-transparent.webp" 
                 alt="Retrato de la coach"
