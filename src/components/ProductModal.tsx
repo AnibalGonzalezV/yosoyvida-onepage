@@ -10,7 +10,7 @@ interface ProductModalProps {
 }
 
 const WHATSAPP_NUMBER = "56912345678";
-const BRAND_LOGO = "/images/cropped-Logo_Transparente-150x150.png";
+const BRAND_LOGO = "/images/cropped-Logo.png"; // Asegúrate de que esta ruta sea correcta
 
 export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   const [mounted, setMounted] = useState(false);
@@ -56,13 +56,14 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
         {/* COLUMNA IMAGEN */}
         <div className="w-full md:w-2/5 h-64 md:h-auto bg-[#F9F4EF] flex items-center justify-center p-6 shrink-0 relative group">
            
-           {/* LOGO MARCA */}
+           {/* LOGO MARCA (Sin recuadro, limpio y flotante) */}
            {product.type !== 'book' && (
-             <div className="absolute top-4 left-4 z-20 bg-white/80 backdrop-blur-sm p-1.5 rounded-lg shadow-sm border border-white/50">
+             <div className="absolute top-4 left-4 z-20 pointer-events-none">
                 <img 
                   src={BRAND_LOGO} 
                   alt="Pro Natural" 
-                  className="w-12 h-12 md:w-14 md:h-14 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                  // Tamaño w-16 h-16 (64px), sombra suave para resaltar sobre cualquier fondo
+                  className="w-16 h-16 object-contain drop-shadow-md opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                 />
              </div>
            )}
@@ -127,7 +128,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
            <div className="h-20 md:h-0"></div>
 
            {/* --- BOTÓN FLOTANTE (Fix para iPhone) --- */}
-           {/* Agregado pb-8 para levantar el botón sobre la barra del iPhone */}
+           {/* pb-8 extra para móviles */}
            <div className="md:relative fixed bottom-0 left-0 right-0 md:bottom-auto md:left-auto md:right-auto p-4 pb-8 md:p-0 bg-white md:bg-transparent border-t md:border-t-0 border-gray-100 md:mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-none z-10">
              <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Me interesa: ${product.name}`}
