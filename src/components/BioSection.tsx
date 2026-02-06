@@ -1,21 +1,30 @@
 import { Sparkles } from "lucide-react"
-import { FadeIn } from "./ui/FadeIn" // <--- Asegúrate de importar el componente FadeIn
+import { FadeIn } from "./ui/FadeIn"
+
+// 👇 CAMBIO: Nombre de la nueva imagen
+const HERO_IMAGE = "/images/reiki-transparent.webp";
 
 export function BioSection() {
   return (
     // Mantenemos el gap fix (-mt-[2px]) y el z-index
-    <section id="bio" className="bg-cream py-8 md:py-12 lg:py-16 px-6 md:px-12 lg:px-24 -mt-[2px] relative z-10">
+    <section id="bio" className="bg-cream py-12 md:py-16 lg:py-24 px-6 md:px-12 lg:px-24 -mt-[2px] relative z-10 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           
-          {/* COLUMNA IMAGEN: Animamos todo el bloque */}
-          {/* direction="right" crea el efecto de entrar desde la izquierda hacia el centro */}
+          {/* COLUMNA IMAGEN: Ajustada para la nueva imagen con transparencia */}
           <FadeIn direction="right" className="relative flex justify-center lg:justify-start order-2 lg:order-1">
-            <div className="relative w-full max-w-lg aspect-[3/4]">
+            
+            {/* Contenedor de imagen */}
+            <div className="relative w-full max-w-[500px] lg:max-w-[600px] aspect-square flex items-center justify-center">
+              
+              {/* Círculo decorativo de fondo (Opcional, para resaltar la transparencia) */}
+              <div className="absolute w-[80%] h-[80%] bg-terracotta/5 rounded-full blur-3xl -z-10" />
+
               <img
-                src="/images/reiki-transparent2.webp" 
-                alt="Retrato de la coach"
-                className="w-full h-full object-contain drop-shadow-xl hover:scale-[1.02] transition-transform duration-500 relative z-10" 
+                src={HERO_IMAGE} 
+                alt="Sanación con cristales y péndulo"
+                // object-contain es clave aquí para que no se recorte nada de las flores o cristales
+                className="w-full h-full object-contain drop-shadow-2xl hover:scale-[1.02] transition-transform duration-700 relative z-10" 
               />
             </div>
           </FadeIn>

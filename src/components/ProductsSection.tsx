@@ -125,6 +125,8 @@ export function ProductsSection() {
         <FadeIn delay={0.4} className="text-center">
           <Link
             to="/catalogo"
+            // ✅ CORRECCIÓN AQUÍ: Forzamos el scroll al inicio al hacer clic
+            onClick={() => window.scrollTo(0, 0)}
             className="inline-flex items-center gap-3 bg-dark-brown text-cream border border-cream/20 font-sans uppercase tracking-widest text-sm md:text-base px-8 md:px-10 py-4 hover:bg-cream hover:text-dark-brown active:scale-95 transition-all duration-300 rounded-full shadow-lg"
           >
             Ver Catálogo Completo

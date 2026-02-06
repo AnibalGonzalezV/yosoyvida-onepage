@@ -13,7 +13,6 @@ export function FooterSection({ topWaveColor = "text-[#E8DED5]" }: FooterSection
   const currentYear = new Date().getFullYear();
 
   return (
-    // CORRECCIÓN 1: Aumentamos el margen negativo a -mt-1 (4px) para forzar la subida
     <footer className="relative -mt-1 z-20"> 
       
       {/* --- PARALLAX / QUOTE AREA --- */}
@@ -30,7 +29,6 @@ export function FooterSection({ topWaveColor = "text-[#E8DED5]" }: FooterSection
         </div>
 
         {/* Ola Superior */}
-        {/* CORRECCIÓN 2: -top-[1px] sube la ola un pixel extra para tapar la grieta */}
         <div className="absolute -top-[1px] w-full transform origin-top scale-y-105 z-10">
             <WaveDivider path={TOP_WAVE} className={topWaveColor} position="top" />
         </div>
@@ -39,10 +37,10 @@ export function FooterSection({ topWaveColor = "text-[#E8DED5]" }: FooterSection
         <div className="relative z-10 px-6 max-w-4xl text-center">
           <blockquote className="space-y-6">
             <p className="font-serif text-2xl md:text-4xl lg:text-5xl text-cream leading-tight italic text-balance drop-shadow-lg">
-              "When I let go of what I am, I become what I might be."
+              "Sanar desde el Amor, Vivir desde la Esencia."
             </p>
             <cite className="block font-cursive text-xl md:text-3xl text-cream/90 not-italic transform -rotate-1">
-              — Lao Tzu
+              — Yo Soy Vida
             </cite>
           </blockquote>
         </div>
@@ -54,22 +52,32 @@ export function FooterSection({ topWaveColor = "text-[#E8DED5]" }: FooterSection
       </div>
 
       {/* --- BOTTOM INFO AREA --- */}
-      {/* Mantenemos -mt-1 aquí para sellar la parte de abajo también */}
       <div className="relative bg-cream pt-8 pb-12 px-6 border-t border-dark-brown/5 -mt-1 z-20">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10 md:gap-8">
           
-          {/* IZQUIERDA: Grupo de Logos */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+          {/* IZQUIERDA: Grupo de Logos (Igualdad Visual) */}
+          <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-10">
+             
+             {/* Logo 1: Yo Soy Vida */}
              <img 
                src="/images/logo-verde.png" 
                alt="Yo Soy Vida Logo" 
-               className="h-14 md:h-16 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity" 
+               // Altura h-14 md:h-16 para que sea grande. Opacidad 100% para máxima visibilidad.
+               className="h-14 md:h-16 w-auto object-contain hover:scale-105 transition-transform duration-300" 
              />
-             <div className="hidden sm:block h-10 w-px bg-dark-brown/10"></div>
+             
+             {/* Separador Vertical (Visible en escritorio) */}
+             <div className="hidden sm:block h-12 w-[1.5px] bg-dark-brown/20 rounded-full"></div>
+             
+             {/* Separador Horizontal (Visible en móvil) */}
+             <div className="sm:hidden w-12 h-[1.5px] bg-dark-brown/20 rounded-full"></div>
+
+             {/* Logo 2: Jesarela (Igualado) */}
              <img 
                src="/images/logo-jesarela.png" 
                alt="Jesarela Logo" 
-               className="h-12 md:h-14 w-auto object-contain opacity-60 hover:opacity-100 transition-all duration-400" 
+               // Aumentado a h-14 md:h-16 (igual que el otro). Quitada la opacidad reducida.
+               className="h-14 md:h-16 w-auto object-contain hover:scale-105 transition-transform duration-300" 
              />
           </div>
 

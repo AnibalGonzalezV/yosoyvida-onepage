@@ -1,4 +1,3 @@
-// ... imports (los mismos de antes)
 import { useState, useMemo } from "react"
 import { Star, Eye, Sparkles, BookOpen } from "lucide-react"
 import { FooterSection } from "../components/FooterSection"
@@ -9,11 +8,9 @@ import { FadeIn } from "../components/ui/FadeIn"
 
 const BRAND_LOGO = "/images/cropped-Logo.png";
 
-// ... constantes de WAVES (las mismas de antes) ...
 const HERO_WAVE = "M0,224L48,202.7C96,181,192,139,288,122.7C384,107,480,117,576,144C672,171,768,213,864,197.3C960,181,1056,107,1152,85.3C1248,64,1344,96,1392,112L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 const MID_WAVE = "M0,224L48,213.3C96,203,192,181,288,186.7C384,192,480,224,576,208C672,192,768,128,864,122.7C960,117,1056,171,1152,170.7C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 
-// ... Componente ProductCard (Mismo de antes, solo verifica que tenga el logo sin caja) ...
 interface CardProps {
   product: Product;
   onOpen: (p: Product) => void;
@@ -27,7 +24,13 @@ function ProductCard({ product, onOpen }: CardProps) {
       onClick={() => onOpen(product)}
       className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full border border-black/5 cursor-pointer relative"
     >
-      <div className={`relative overflow-hidden bg-gray-50 ${isBook ? "aspect-[3/4]" : "aspect-square"}`}>
+      {/* CORRECCIÓN DEL BUG DE ESPACIO BLANCO:
+         Cambiamos la lógica para que SIEMPRE use aspect-[3/4], sea libro o producto.
+         Esto alinea las cajas grises de todas las tarjetas. Como usamos object-contain abajo,
+         la imagen cuadrada de la sal simplemente quedará centrada con un poco más de aire gris arriba/abajo,
+         pero el texto comenzará a la misma altura que los libros vecinos.
+      */}
+      <div className="relative overflow-hidden bg-gray-50 aspect-[3/4]">
         
         {!isBook && (
              <div className="absolute top-2 left-2 z-20 pointer-events-none">
@@ -116,10 +119,7 @@ export default function CatalogoPage() {
   };
 
   return (
-    // FIX IPHONE: min-h-dvh (altura dinámica) y antialiased (suavizado de fuente)
     <main className="min-h-dvh bg-cream antialiased">
-      
-      {/* ... (El resto del código del Hero, Grid y Modal se mantiene exactamente igual) ... */}
       
       {/* HERO SECTION */}
       <section className="relative w-full h-[50vh] min-h-[400px] flex items-center justify-center">
