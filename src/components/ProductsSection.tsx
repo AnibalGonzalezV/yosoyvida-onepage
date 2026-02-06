@@ -6,11 +6,12 @@ import { topProducts, generalCatalog, type Product } from "../data/product"
 import { ProductModal } from "./ProductModal"
 import { FadeIn } from "./ui/FadeIn" 
 
-// 👇 RUTA DEL LOGO (Confirma que la imagen está en public/images/cropped-Logo.png)
 const BRAND_LOGO = "/images/cropped-Logo.png";
-
 const BOTTOM_WAVE = "M0,224L48,202.7C96,181,192,139,288,122.7C384,107,480,117,576,144C672,171,768,213,864,197.3C960,181,1056,107,1152,85.3C1248,64,1344,96,1392,112L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 const WHATSAPP_NUMBER = "56912345678" 
+
+// 👇 COLOR VERDE DEL LOGO
+const LOGO_GREEN = "text-[#607D68]";
 
 export function ProductsSection() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -26,7 +27,6 @@ export function ProductsSection() {
   }
 
   const allItems = [...topProducts, ...generalCatalog];
-  // Selección de IDs para mostrar en el Home
   const selectedIds = [2, 9, 4, 3]; 
 
   const homeProducts = selectedIds.map(id => 
@@ -43,7 +43,8 @@ export function ProductsSection() {
                 <span className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-wide opacity-90">
                 Medicina
                 </span>
-                <span className="font-cursive text-4xl md:text-5xl lg:text-6xl transform relative top-1">
+                {/* 👇 APLICADO EL COLOR VERDE AQUÍ */}
+                <span className={`font-cursive font-bold text-4xl md:text-5xl lg:text-6xl transform relative top-1 ${LOGO_GREEN}`}>
                 Natural
                 </span>
             </h2>
@@ -73,15 +74,11 @@ export function ProductsSection() {
                 >
                 <div className="relative aspect-square overflow-hidden bg-white p-6">
                     
-                    {/* --- LOGO DE MARCA (Integración Limpia y Grande) --- */}
                     {product.type !== 'book' && (
-                        // pointer-events-none para que no bloquee el click en la tarjeta
                         <div className="absolute top-2 left-2 z-20 pointer-events-none animate-fade-in">
                             <img 
                             src={BRAND_LOGO} 
                             alt="Pro Natural" 
-                            // Tamaño w-16 h-16 (64px) para las tarjetas del home que son un poco más chicas
-                            // drop-shadow-md para separarlo del fondo sin recuadro
                             className="w-16 h-16 object-contain drop-shadow-md opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                             />
                         </div>
@@ -93,7 +90,6 @@ export function ProductsSection() {
                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                     />
                     
-                    {/* Overlay al hacer hover */}
                     <div className="absolute inset-0 bg-dark-brown/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1px]">
                         <div className="bg-white text-dark-brown px-3 py-1.5 rounded-full font-bold text-xs flex items-center gap-1 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">
                         <Eye className="w-3 h-3" /> Ver Detalle
@@ -125,7 +121,6 @@ export function ProductsSection() {
         <FadeIn delay={0.4} className="text-center">
           <Link
             to="/catalogo"
-            // ✅ CORRECCIÓN AQUÍ: Forzamos el scroll al inicio al hacer clic
             onClick={() => window.scrollTo(0, 0)}
             className="inline-flex items-center gap-3 bg-dark-brown text-cream border border-cream/20 font-sans uppercase tracking-widest text-sm md:text-base px-8 md:px-10 py-4 hover:bg-cream hover:text-dark-brown active:scale-95 transition-all duration-300 rounded-full shadow-lg"
           >

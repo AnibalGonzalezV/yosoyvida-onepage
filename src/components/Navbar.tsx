@@ -18,7 +18,6 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Cambiamos el estado si bajamos más de 20px
       setIsScrolled(window.scrollY > 20)
 
       if (location.pathname === "/") {
@@ -58,57 +57,51 @@ export function Navbar() {
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
     
-    if (href === "/") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-    else if (href.startsWith("/#")) {
+    // Si es un ancla interna (ej: /#about)
+    if (href.startsWith("/#")) {
       const id = href.replace("/#", "");
       const element = document.getElementById(id);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
+    } 
+    // Si es una ruta limpia (ej: / o /catalogo)
+    else {
+      // Forzamos el scroll al tope de la página
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  // Clases comunes para ambas imágenes del logo para que tengan el mismo tamaño y posición
   const logoClasses = "h-12 md:h-20 w-auto object-contain transition-all duration-500";
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
         isScrolled 
-          ? "bg-cream/90 backdrop-blur-md border-dark-brown/5 shadow-sm py-2" // Un poco más compacto al bajar
-          : "bg-transparent border-transparent py-4" // Más espacioso arriba
+          ? "bg-cream/90 backdrop-blur-md border-dark-brown/5 shadow-sm py-2" 
+          : "bg-transparent border-transparent py-4"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between transition-all duration-500">
           
-          {/* --- AQUÍ ESTÁ EL CAMBIO DEL LOGO --- */}
           <Link 
             to="/" 
             onClick={() => handleNavClick("/")} 
-            // Usamos 'grid' para apilar las imágenes una sobre otra
             className="relative z-50 cursor-pointer block grid items-center justify-items-start"
           >
-            {/* LOGO 1: Versión Clara (Crema/Blanca) para cuando está arriba */}
-            {/* NOTA: Debes subir tu versión clara de la imagen */}
             <img
                 src="/images/logo-blanco.png" 
                 alt="Yo Soy Vida Logo Claro"
-                // Se muestra solo si NO está scrolleado. Se posiciona absoluto para no ocupar doble espacio.
                 className={`${logoClasses} absolute top-0 left-0 ${isScrolled ? 'opacity-0' : 'opacity-100'}`}
             />
 
-            {/* LOGO 2: Versión Original (Verde/Oscura) para cuando baja */}
             <img
                 src="/images/logo-verde.png"
                 alt="Yo Soy Vida Logo Original"
-                // Se muestra solo SI está scrolleado. Esta imagen define el tamaño del contenedor.
                 className={`${logoClasses} relative ${isScrolled ? 'opacity-100' : 'opacity-0'}`}
             />
           </Link>
-          {/* ------------------------------------ */}
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
@@ -119,7 +112,6 @@ export function Navbar() {
                   key={link.href}
                   to={link.href}
                   onClick={() => handleNavClick(link.href)}
-                  // Ajustamos los colores del texto según el scroll también
                   className={`relative font-sans text-sm uppercase tracking-widest transition-colors duration-300 py-2 group ${
                     isActive 
                       ? "text-terracotta font-bold"
@@ -138,8 +130,7 @@ export function Navbar() {
           {/* Mobile Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 transition-colors duration-300 ${
-              // El botón de menú también cambia de color
+            className={`p-2 transition-colors duration-300 md:hidden ${
               isScrolled || isMobileMenuOpen ? "text-dark-brown" : "text-cream drop-shadow-sm"
             }`}
           >
@@ -148,9 +139,9 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu (Sin cambios) */}
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-0 left-0 w-full h-screen bg-cream/95 backdrop-blur-xl pt-28 px-6 flex flex-col items-center gap-8 animate-fade-in">
+        <div className="absolute top-0 left-0 flex h-screen w-full flex-col items-center gap-8 bg-cream/95 pt-28 px-6 backdrop-blur-xl animate-fade-in md:hidden">
           {navLinks.map((link) => (
             <Link
               key={link.href}

@@ -24,9 +24,9 @@ export function HeroSection() {
         {/* Animación del Título */}
         <FadeIn delay={0.2} direction="up">
             <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-cream text-center tracking-wide leading-tight drop-shadow-lg">
-            BIENESTAR
+            TERAPIA
             <br />
-            <span className="italic font-light">Natural & Terapia Integral</span>
+            <span className="italic font-light">Integral y Bienestar Natural</span>
             </h1>
         </FadeIn>
       </div>
