@@ -4,13 +4,14 @@ import { FooterSection } from "../components/FooterSection"
 import { WaveDivider } from "../components/WaveDivider"
 import { ProductModal } from "../components/ProductModal" 
 import { topProducts, generalCatalog, type Product } from "../data/product"
-import { FadeIn } from "../components/ui/FadeIn" // <--- Importamos FadeIn
+import { FadeIn } from "../components/ui/FadeIn"
 
-// Olas Decorativas
+// 👇 RUTA DEL LOGO (Confirma que este sea el nombre exacto de tu archivo en public/images/)
+const BRAND_LOGO = "/images/cropped-Logo.png";
+
 const HERO_WAVE = "M0,224L48,202.7C96,181,192,139,288,122.7C384,107,480,117,576,144C672,171,768,213,864,197.3C960,181,1056,107,1152,85.3C1248,64,1344,96,1392,112L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 const MID_WAVE = "M0,224L48,213.3C96,203,192,181,288,186.7C384,192,480,224,576,208C672,192,768,128,864,122.7C960,117,1056,171,1152,170.7C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 
-// --- COMPONENTE TARJETA (Local) ---
 interface CardProps {
   product: Product;
   onOpen: (p: Product) => void;
@@ -26,6 +27,19 @@ function ProductCard({ product, onOpen }: CardProps) {
     >
       {/* Imagen */}
       <div className={`relative overflow-hidden bg-gray-50 ${isBook ? "aspect-[3/4]" : "aspect-square"}`}>
+        
+        {/* --- LOGO DE MARCA (Sin caja, más grande) --- */}
+        {!isBook && (
+             <div className="absolute top-2 left-2 z-20 pointer-events-none">
+                <img 
+                  src={BRAND_LOGO} 
+                  alt="Pro Natural" 
+                  // w-20 h-20 es más grande. drop-shadow-md le da el toque flotante.
+                  className="w-20 h-20 object-contain drop-shadow-md opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                />
+             </div>
+        )}
+
         <img
           src={product.image}
           alt={product.name}
@@ -34,9 +48,9 @@ function ProductCard({ product, onOpen }: CardProps) {
         
         {/* Badges */}
         {product.bestseller && (
-          <div className="absolute top-3 left-3 bg-terracotta text-cream text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-md z-10 animate-fade-in">
+          <div className="absolute top-3 right-3 bg-terracotta text-cream text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-md z-10 animate-fade-in">
             <Star className="w-3 h-3 fill-current" />
-            <span className="hidden sm:inline">FAVORITO</span>
+            <span>TOP</span>
           </div>
         )}
         {isBook && (
@@ -78,33 +92,27 @@ function ProductCard({ product, onOpen }: CardProps) {
   )
 }
 
-// --- PÁGINA PRINCIPAL ---
 export default function CatalogoPage() {
   const [filter, setFilter] = useState<'all' | 'product' | 'book'>('all');
   const [visibleCount, setVisibleCount] = useState(8); 
-  
-  // Estado para el Modal
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Filtrado
   const filteredItems = useMemo(() => {
     if (filter === 'all') return generalCatalog;
     return generalCatalog.filter(item => item.type === filter);
   }, [filter]);
 
-  // Paginación
   const visibleItems = filteredItems.slice(0, visibleCount);
   const hasMore = visibleItems.length < filteredItems.length;
 
-  // Handlers
   const openModal = (product: Product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   }
   const closeModal = () => {
     setIsModalOpen(false);
-    setTimeout(() => setSelectedProduct(null), 300); // Limpia data después de cerrar
+    setTimeout(() => setSelectedProduct(null), 300); 
   }
   const handleFilterChange = (newFilter: 'all' | 'product' | 'book') => {
       setFilter(newFilter);
@@ -172,7 +180,7 @@ export default function CatalogoPage() {
         <WaveDivider path={MID_WAVE} className="text-cream" />
       </section>
 
-      {/* CATÁLOGO GENERAL (Con Filtros y Carga Progresiva) */}
+      {/* CATÁLOGO GENERAL */}
       <section className="bg-cream py-16 md:py-24 px-6 md:px-12 -mt-[2px] z-10 relative">
         <div className="max-w-7xl mx-auto">
           
@@ -182,7 +190,6 @@ export default function CatalogoPage() {
                     Explora la Colección
                 </h2>
 
-                {/* Botones de Filtro */}
                 <div className="flex flex-wrap gap-2 justify-center">
                     {[
                         { key: 'all', label: 'Ver Todo' },
@@ -205,17 +212,14 @@ export default function CatalogoPage() {
               </div>
           </FadeIn>
 
-          {/* Grid Dinámico */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8 mb-12">
             {visibleItems.map((product, index) => (
-              // Reiniciamos el delay si es un filtro nuevo para que se vea lindo
               <FadeIn key={product.id} delay={index % 4 * 0.1} className="h-full">
                  <ProductCard product={product} onOpen={openModal} />
               </FadeIn>
             ))}
           </div>
 
-          {/* Botón "Cargar Más" */}
           {hasMore && (
             <FadeIn delay={0.2} className="flex justify-center pt-8">
                   <button 
@@ -242,7 +246,6 @@ export default function CatalogoPage() {
 
       <FooterSection topWaveColor="text-cream" />
 
-      {/* MODAL GLOBAL */}
       <ProductModal 
         product={selectedProduct} 
         isOpen={isModalOpen} 

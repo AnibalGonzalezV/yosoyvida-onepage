@@ -17,7 +17,7 @@ export function FlowerDivider2() {
       {/* Imagen de Fondo 2 */}
       <div className="fixed inset-0 w-full h-full">
         <img 
-          src="/images/divider-bg-2.jpg"
+          src="/images/colibries-divider.webp"
           alt="Flowers Background 2"
           className="w-full h-full object-cover"
         />

@@ -13,7 +13,7 @@ export function BioSection() {
           <FadeIn direction="right" className="relative flex justify-center lg:justify-start order-2 lg:order-1">
             <div className="relative w-full max-w-lg aspect-[3/4]">
               <img
-                src="/images/reiki-transparent.webp" 
+                src="/images/reiki-transparent2.webp" 
                 alt="Retrato de la coach"
                 className="w-full h-full object-contain drop-shadow-xl hover:scale-[1.02] transition-transform duration-500 relative z-10" 
               />
@@ -59,7 +59,7 @@ export function BioSection() {
 
                 {/* 5. Firma / Cierre */}
                 <FadeIn delay={0.6}>
-                    <p className="font-cursive text-3xl text-earthy-brown pt-2 transform -rotate-1 origin-left">
+                    <p className="font-cursive text-3xl text-terracotta pt-2 transform origin-left">
                     Restaura tu armonía. Recupera tu equilibrio natural.
                     </p>
                 </FadeIn>
