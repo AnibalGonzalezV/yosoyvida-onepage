@@ -24,12 +24,6 @@ function ProductCard({ product, onOpen }: CardProps) {
       onClick={() => onOpen(product)}
       className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full border border-black/5 cursor-pointer relative"
     >
-      {/* CORRECCIÓN DEL BUG DE ESPACIO BLANCO:
-         Cambiamos la lógica para que SIEMPRE use aspect-[3/4], sea libro o producto.
-         Esto alinea las cajas grises de todas las tarjetas. Como usamos object-contain abajo,
-         la imagen cuadrada de la sal simplemente quedará centrada con un poco más de aire gris arriba/abajo,
-         pero el texto comenzará a la misma altura que los libros vecinos.
-      */}
       <div className="relative overflow-hidden bg-gray-50 aspect-[3/4]">
         
         {!isBook && (

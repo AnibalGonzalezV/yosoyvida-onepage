@@ -2,7 +2,6 @@ import { MessageCircle, Dna, Zap, ClipboardList, Activity } from "lucide-react"
 import { FadeIn } from "./ui/FadeIn"
 
 // Definimos el color verde boho para usarlo consistentemente
-// Puedes cambiar este código Hex por otro si prefieres otro tono de verde
 const GREEN_ACCENT = "text-[#607D68]"; 
 const GREEN_BG = "bg-[#607D68]";
 const GREEN_BORDER = "border-[#607D68]";
@@ -51,8 +50,8 @@ const pillars = [
   },
 ]
 
-const FEET_IMAGE = "/images/pillars-feet.webp"; 
-const BOVIS_BG = "/images/bovis-background.webp";
+const FEET_IMAGE = "/images/pillars-photo.webp"; 
+const BOVIS_BG = "/images/bovis-back.webp";
 
 export function PillarsSection() {
   const leftPillars = pillars.slice(0, 2);
@@ -93,8 +92,12 @@ export function PillarsSection() {
                             alt="Energía vital" 
                             className="w-full h-full object-cover transition-transform duration-1000 scale-105 group-hover:scale-110"
                         />
-                        {/* Filtro verdoso oscuro para integrar */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-dark-brown/95 via-[#4A5D4E]/80 to-transparent mix-blend-multiply"></div>
+                        {/* CAMBIO AQUÍ: Filtro verdoso/oscuro mucho más sutil.
+                           - Antes: from-dark-brown/95 via-[#4A5D4E]/80
+                           - Ahora: from-dark-brown/70 via-[#4A5D4E]/50
+                           Esto permite que la imagen de fondo se vea más clara.
+                        */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-dark-brown/70 via-[#4A5D4E]/50 to-transparent mix-blend-multiply"></div>
                     </div>
 
                     <div className="relative z-10 h-full flex flex-col items-center justify-center text-center p-8 md:p-12">
@@ -105,7 +108,7 @@ export function PillarsSection() {
                             El Biómetro de Bovis
                         </h3>
                         <p className="font-sans text-white leading-relaxed text-lg md:text-xl max-w-2xl font-medium text-balance drop-shadow-md antialiased">
-                            Al igual que un termómetro mide la temperatura, esta herramienta mide tu <span className="font-bold text-[#A4C3A2] border-b border-[#A4C3A2]/50">vitalidad real</span>. 
+                            Al igual que un termómetro mide la temperatura, esta herramienta mide tu <span className="font-bold text-[#A4C3A2] border-b border-[#A4C3A2]/50">vitalidad real</span>, tu frecuencia vibratoria. 
                             Si vibras alto, tienes salud; si vibras bajo, el cuerpo enferma.
                         </p>
                     </div>
@@ -140,16 +143,16 @@ export function PillarsSection() {
 
           {/* COLUMNA CENTRAL (IMAGEN PIES) */}
           <div className="order-1 lg:order-2 flex justify-center h-full py-8 lg:py-0 relative z-0">
-             <FadeIn direction="up" delay={0.2} className="relative w-full max-w-[350px] lg:max-w-full h-full flex items-center justify-center">
-                 {/* Fondo sutil VERDE detrás */}
-                 <div className="absolute inset-0 bg-[#607D68]/10 rounded-full blur-3xl transform scale-90" />
-                 
-                 <img
+              <FadeIn direction="up" delay={0.2} className="relative w-full max-w-[350px] lg:max-w-full h-full flex items-center justify-center">
+                  {/* Fondo sutil VERDE detrás */}
+                  <div className="absolute inset-0 bg-[#607D68]/10 rounded-full blur-3xl transform scale-90" />
+                  
+                  <img
                     src={FEET_IMAGE} 
                     alt="Conexión con la tierra"
                     className="w-full h-auto max-h-[500px] lg:max-h-[600px] object-contain drop-shadow-xl z-10 hover:scale-[1.02] transition-transform duration-700"
                   />
-             </FadeIn>
+              </FadeIn>
           </div>
 
           {/* LADO DERECHO */}

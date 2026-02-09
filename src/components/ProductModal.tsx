@@ -9,7 +9,7 @@ interface ProductModalProps {
   onClose: () => void;
 }
 
-const WHATSAPP_NUMBER = "56912345678";
+const WHATSAPP_NUMBER = "56940616469";
 const BRAND_LOGO = "/images/cropped-Logo.png"; // Asegúrate de que esta ruta sea correcta
 
 export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {

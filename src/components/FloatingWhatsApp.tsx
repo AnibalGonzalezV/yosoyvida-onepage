@@ -2,7 +2,7 @@ import { MessageCircle } from "lucide-react"
 
 export function FloatingWhatsApp() {
   // Reemplaza con tu número real
-  const PHONE_NUMBER = "56912345678" 
+  const PHONE_NUMBER = "56940616469" 
   const MESSAGE = "Hola, vengo de tu página web y me gustaría más información."
 
   return (

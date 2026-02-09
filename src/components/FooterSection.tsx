@@ -78,7 +78,7 @@ export function FooterSection({ topWaveColor = "text-[#E8DED5]" }: FooterSection
           <div className="flex flex-col items-center md:items-end gap-4 text-center md:text-right">
              <div className="flex gap-4">
                 <a 
-                  href="https://instagram.com/yosoyvida.cl" 
+                  href="https://instagram.com/yosoyvidanatural" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group flex items-center gap-2 text-dark-brown hover:text-terracotta transition-colors duration-300"

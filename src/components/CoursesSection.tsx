@@ -90,7 +90,7 @@ export function CoursesSection() {
                <FadeIn delay={0.6}>
                   <div className="flex flex-col sm:flex-row gap-5 items-center">
                       <a
-                      href="https://wa.me/56912345678?text=Hola! Me interesa inscribirme en el Curso de Reiki Nivel 1"
+                      href="https://wa.me/56940616469?text=Hola! Me interesa inscribirme en el Curso de Reiki Usui"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full sm:w-auto text-center bg-terracotta text-cream font-sans uppercase tracking-widest text-sm px-8 py-4 rounded-full hover:bg-dark-brown transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
