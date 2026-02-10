@@ -10,6 +10,7 @@ import CatalogoPage from './pages/Catalogo';
 
 // Configuración
 import { SITE_CONFIG } from './config/site';
+import AgendaPage from './pages/Agenda';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalogo" element={<CatalogoPage />} />
+          <Route path="/agenda" element={<AgendaPage />} />
           {/* Si creas la página de cursos después, la agregas aquí:
               <Route path="/cursos" element={<CursosPage />} /> 
           */}

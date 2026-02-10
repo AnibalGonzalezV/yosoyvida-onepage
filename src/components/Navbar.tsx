@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react"
 import { Link, useLocation } from "react-router-dom"
-import { Menu, X } from "lucide-react"
+import { Menu, X, CalendarCheck } from "lucide-react" // Importamos icono
 import { SITE_CONFIG } from "../config/site"
 
 export function Navbar() {
@@ -21,27 +21,23 @@ export function Navbar() {
     });
   }, []);
 
-  // --- NUEVA LÓGICA: SCROLL CRUZADO ENTRE PÁGINAS ---
-  // Este efecto detecta cuando cambias de página (ej: Catálogo -> Home) y tienes un #hash en la URL
+  // --- LÓGICA SCROLL CRUZADO ---
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace('#', '');
       const element = document.getElementById(id);
       
       if (element) {
-        // Hacemos el scroll inmediatamente si el elemento ya está ahí
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth' });
-        }, 100); // Pequeño delay para asegurar que la página cargó
+        }, 100);
       }
     } else if (location.pathname === '/' && !location.hash) {
-        // Si vamos al Home limpio ("/")
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [location]); // Se ejecuta cada vez que cambia la URL (Ruta o Hash)
+  }, [location]); 
 
-
-  // --- 2. Lógica de Scroll Spy (Solo activa en el Home) ---
+  // --- 2. Lógica de Scroll Spy ---
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
@@ -75,7 +71,7 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [location.pathname, navItems])
 
-  // --- 3. Detectar página activa (Para marcar en negrita "Catálogo") ---
+  // --- 3. Detectar página activa ---
   useEffect(() => {
       const currentPathId = location.pathname.replace("/", "");
       if (currentPathId && currentPathId !== "") {
@@ -83,11 +79,10 @@ export function Navbar() {
       }
   }, [location.pathname])
 
-  // --- 4. Manejo de Clics MEJORADO ---
+  // --- 4. Manejo de Clics ---
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
     
-    // CASO A: Estamos en el Home y hacemos click en una sección interna
     if (location.pathname === "/" && href.startsWith("/#")) {
       const id = href.replace("/#", "");
       const element = document.getElementById(id);
@@ -95,15 +90,13 @@ export function Navbar() {
         element.scrollIntoView({ behavior: "smooth" });
       }
     } 
-    
-    // CASO B: Estamos en el Home y clicamos "Inicio"
     else if (location.pathname === "/" && href === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-
-    // CASO C: Estamos en OTRA página (ej: Catálogo).
-    // NO HACEMOS NADA AQUÍ. Dejamos que el <Link> cambie la URL.
-    // El "useEffect" de arriba (Lógica Scroll Cruzado) detectará el cambio y hará el scroll.
+    // Si es /agenda, forzamos scroll top por si acaso (aunque ScrollToTop lo hace)
+    else if (href === "/agenda") {
+        window.scrollTo(0,0);
+    }
   };
 
   const logoClasses = "h-12 md:h-20 w-auto object-contain transition-all duration-500";
@@ -140,11 +133,35 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((link) => {
-              const isActive = activeSection === link.id
+              const isActive = activeSection === link.id;
+              
+              // 👇 LÓGICA ESPECIAL: Si es el botón de Agenda, lo estilizamos diferente
+              const isAgenda = link.href === "/agenda";
+
+              if (isAgenda) {
+                  return (
+                    <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => handleNavClick(link.href)}
+                        className={`
+                            px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-sm flex items-center gap-2
+                            ${isScrolled 
+                                ? "bg-terracotta text-cream hover:bg-dark-brown hover:shadow-md" 
+                                : "bg-cream text-terracotta hover:bg-white hover:text-dark-brown"
+                            }
+                        `}
+                    >
+                        <CalendarCheck className="w-4 h-4" />
+                        {link.name}
+                    </Link>
+                  )
+              }
+
               return (
                 <Link
                   key={link.href}
-                  to={link.href} // El Link maneja la navegación a "/"
+                  to={link.href}
                   onClick={() => handleNavClick(link.href)}
                   className={`relative font-sans text-sm uppercase tracking-widest transition-colors duration-300 py-2 group ${
                     isActive 
@@ -176,18 +193,24 @@ export function Navbar() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="absolute top-0 left-0 flex h-screen w-full flex-col items-center gap-8 bg-cream/95 pt-28 px-6 backdrop-blur-xl animate-fade-in md:hidden">
-          {navItems.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              onClick={() => handleNavClick(link.href)}
-              className={`font-sans text-xl uppercase tracking-widest transition-colors ${
-                  activeSection === link.id ? "text-terracotta font-bold" : "text-dark-brown"
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navItems.map((link) => {
+              const isAgenda = link.href === "/agenda";
+              return (
+                <Link
+                    key={link.href}
+                    to={link.href}
+                    onClick={() => handleNavClick(link.href)}
+                    className={`font-sans text-xl uppercase tracking-widest transition-colors ${
+                        // Si es agenda, lo ponemos más grande y terracota en móvil también
+                        isAgenda 
+                            ? "bg-terracotta text-cream px-8 py-3 rounded-full font-bold shadow-lg" 
+                            : activeSection === link.id ? "text-terracotta font-bold" : "text-dark-brown"
+                    }`}
+                >
+                    {link.name}
+                </Link>
+              )
+          })}
         </div>
       )}
     </nav>

@@ -29,5 +29,6 @@ export const SITE_CONFIG = {
     { name: "Terapias", href: "/#terapias" },
     { name: "Cursos", href: "/#cursos" },
     { name: "Catálogo", href: "/catalogo" },
+    { name: "Agenda", href: "/agenda" },
   ]
 };

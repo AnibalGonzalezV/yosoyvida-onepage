@@ -1,4 +1,5 @@
-import { Clock, CheckCircle2, CalendarDays, Sparkles } from "lucide-react"
+import { Clock, CheckCircle2, CalendarDays, Sparkles, CalendarCheck } from "lucide-react"
+import { Link } from "react-router-dom"
 import { WaveDivider } from "./WaveDivider"
 import { FadeIn } from "./ui/FadeIn"
 
@@ -11,41 +12,31 @@ export function TherapiesSection() {
   return (
     <section 
       id="terapias" 
-      // Agregamos relative y z-0 para el contexto
       className="relative z-0 min-h-[800px] flex items-center justify-center -mt-[2px]"
-      // ESTA ES LA CLAVE: Recorta todo lo que sea "fixed" dentro de los límites de esta sección
       style={{ clipPath: "inset(0)" }} 
     >
        
-       {/* --- FONDO ESTÁTICO (PARALLAX) --- */}
+       {/* --- FONDO ESTÁTICO --- */}
        <div className="fixed inset-0 w-full h-full">
           <img 
             src={TEXTURE_BG} 
             alt="Fondo Loto" 
-            // Imagen 100% nítida, sin opacidad ni mezcla
             className="w-full h-full object-cover" 
           />
-          
-          {/* NOTA: Agregué una capa negra MUY sutil (20%) SOLO para que las letras blancas 
-             se lean bien si la imagen del loto es muy clara. 
-             Si quieres la imagen 100% pura, borra la siguiente línea.
-          */}
           <div className="absolute inset-0 bg-black/20" />
        </div>
 
-       {/* --- OLA SUPERIOR (Conexión con la sección anterior Cream) --- */}
+       {/* --- OLAS --- */}
        <div className="absolute -top-[1px] w-full transform origin-top scale-y-105 z-10">
           <WaveDivider path={TOP_WAVE} className="text-cream" position="top" />
        </div>
        
-       {/* --- CONTENIDO PRINCIPAL --- */}
        <div className="relative z-10 py-32 px-6 md:px-12 w-full">
         <div className="max-w-5xl w-full mx-auto">
           
           <FadeIn>
              <div className="bg-white/10 border border-white/20 rounded-3xl p-8 md:p-12 backdrop-blur-md shadow-2xl relative overflow-hidden group">
                 
-                {/* Efecto de luz decorativo */}
                 <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors duration-700"></div>
                 
                 <div className="relative z-10 grid grid-cols-1 md:grid-cols-[0.7fr_1.3fr] gap-10 md:gap-16 items-center">
@@ -66,16 +57,24 @@ export function TherapiesSection() {
                             </p>
                         </div>
 
-                        <div className="flex flex-col items-center md:items-start gap-2">
+                        <div className="flex flex-col items-center md:items-start gap-4">
                              <div className="flex items-center gap-3">
                                 <Clock className="w-8 h-8 text-white drop-shadow-md" strokeWidth={2} />
                                 <span className="text-4xl md:text-5xl font-serif italic text-white font-medium drop-shadow-md">
                                     2 Horas
                                 </span>
                              </div>
-                             <p className="text-sm uppercase tracking-widest text-white font-bold pl-1 drop-shadow-md opacity-100">
-                                 De dedicación exclusiva
-                             </p>
+                             
+                             {/* BOTÓN CON LÓGICA DE SCROLL AL CLICK */}
+                             <Link 
+                                to="/agenda"
+                                // 👇 ESTA ES LA LÓGICA QUE FALTABA
+                                onClick={() => window.scrollTo(0, 0)}
+                                className="group inline-flex items-center gap-2 bg-cream text-terracotta px-6 py-3 rounded-full font-bold uppercase tracking-wider text-sm hover:bg-white transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 mt-2"
+                             >
+                                <CalendarCheck className="w-5 h-5" />
+                                <span>Agendar Hora</span>
+                             </Link>
                         </div>
                     </div>
 
@@ -124,7 +123,6 @@ export function TherapiesSection() {
         </div>
        </div>
 
-       {/* --- OLA INFERIOR (Conexión con la sección siguiente Cream) --- */}
        <div className="absolute bottom-0 w-full transform origin-bottom scale-y-105 z-10">
           <WaveDivider path={BOTTOM_WAVE} className="text-cream" position="bottom" />
        </div>
