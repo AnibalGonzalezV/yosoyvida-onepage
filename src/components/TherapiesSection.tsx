@@ -5,31 +5,47 @@ import { FadeIn } from "./ui/FadeIn"
 const TOP_WAVE = "M0,288L48,282.7C96,277,192,267,288,250.7C384,235,480,213,576,186.7C672,160,768,128,864,144C960,160,1056,224,1152,234.7C1248,245,1344,203,1392,181.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 const BOTTOM_WAVE = "M0,128L48,154.7C96,181,192,235,288,218.7C384,203,480,117,576,122.7C672,128,768,224,864,240C960,256,1056,192,1152,149.3C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 
-const TEXTURE_BG = "/images/background-component.webp"
+const TEXTURE_BG = "/images/loto-background.webp"
 
 export function TherapiesSection() {
   return (
-    <section id="terapias" className="relative bg-terracotta text-cream overflow-hidden">
+    <section 
+      id="terapias" 
+      // Agregamos relative y z-0 para el contexto
+      className="relative z-0 min-h-[800px] flex items-center justify-center -mt-[2px]"
+      // ESTA ES LA CLAVE: Recorta todo lo que sea "fixed" dentro de los límites de esta sección
+      style={{ clipPath: "inset(0)" }} 
+    >
        
-       <div className="absolute inset-0 z-0 pointer-events-none">
+       {/* --- FONDO ESTÁTICO (PARALLAX) --- */}
+       <div className="fixed inset-0 w-full h-full">
           <img 
             src={TEXTURE_BG} 
-            alt="Textura de arena" 
-            className="w-full h-full object-cover opacity-40 mix-blend-overlay" 
+            alt="Fondo Loto" 
+            // Imagen 100% nítida, sin opacidad ni mezcla
+            className="w-full h-full object-cover" 
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-terracotta/80 via-transparent to-terracotta/80"></div>
+          
+          {/* NOTA: Agregué una capa negra MUY sutil (20%) SOLO para que las letras blancas 
+             se lean bien si la imagen del loto es muy clara. 
+             Si quieres la imagen 100% pura, borra la siguiente línea.
+          */}
+          <div className="absolute inset-0 bg-black/20" />
        </div>
 
-       <div className="-mt-[2px] relative z-10">
-         <WaveDivider path={TOP_WAVE} className="text-cream" position="top" />
+       {/* --- OLA SUPERIOR (Conexión con la sección anterior Cream) --- */}
+       <div className="absolute -top-[1px] w-full transform origin-top scale-y-105 z-10">
+          <WaveDivider path={TOP_WAVE} className="text-cream" position="top" />
        </div>
        
-       <div className="py-20 md:py-32 px-6 md:px-12 flex items-center justify-center relative z-10">
+       {/* --- CONTENIDO PRINCIPAL --- */}
+       <div className="relative z-10 py-32 px-6 md:px-12 w-full">
         <div className="max-w-5xl w-full mx-auto">
           
           <FadeIn>
              <div className="bg-white/10 border border-white/20 rounded-3xl p-8 md:p-12 backdrop-blur-md shadow-2xl relative overflow-hidden group">
                 
+                {/* Efecto de luz decorativo */}
                 <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors duration-700"></div>
                 
                 <div className="relative z-10 grid grid-cols-1 md:grid-cols-[0.7fr_1.3fr] gap-10 md:gap-16 items-center">
@@ -88,7 +104,6 @@ export function TherapiesSection() {
                             <li className="flex items-center gap-4 group/item">
                                 <CheckCircle2 className="w-6 h-6 text-cream shrink-0 group-hover/item:scale-110 transition-transform" />
                                 <div>
-                                    {/* CAMBIO: whitespace-normal en móvil, nowrap en desktop */}
                                     <span className="block font-serif text-xl text-white whitespace-normal md:whitespace-nowrap">
                                         Análisis de Biodescodificación
                                     </span>
@@ -106,11 +121,13 @@ export function TherapiesSection() {
                 </div>
              </div>
           </FadeIn>
-
         </div>
        </div>
 
-       <WaveDivider path={BOTTOM_WAVE} className="text-cream" />
+       {/* --- OLA INFERIOR (Conexión con la sección siguiente Cream) --- */}
+       <div className="absolute bottom-0 w-full transform origin-bottom scale-y-105 z-10">
+          <WaveDivider path={BOTTOM_WAVE} className="text-cream" position="bottom" />
+       </div>
     </section>
   )
 }

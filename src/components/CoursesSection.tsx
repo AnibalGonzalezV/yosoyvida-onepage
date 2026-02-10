@@ -1,5 +1,6 @@
 import { Sparkles, Clock, Globe, BookOpen, Award } from "lucide-react"
 import { FadeIn } from "./ui/FadeIn"
+import { SITE_CONFIG } from "../config/site" // 👈 IMPORTAR
 
 const COURSE_IMAGE = "/images/reiki-curso-square.webp"; 
 
@@ -8,19 +9,12 @@ export function CoursesSection() {
     <section id="cursos" className="bg-[#E8DED5] py-16 md:py-24 px-6 md:px-12 -mt-[2px] relative z-10">
       <div className="max-w-7xl mx-auto"> 
         
-        {/* CAMBIO 1: bg-cream para todo, sin división de colores */}
         <div className="bg-cream rounded-3xl overflow-hidden shadow-xl">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center p-6 md:p-10 lg:p-12">
             
-            {/* --- COLUMNA IMAGEN (Ahora integrada y más grande) --- */}
-            {/* Ocupa 5 de 12 columnas en escritorio */}
             <FadeIn direction="right" className="order-1 lg:order-2 lg:col-span-5 relative flex justify-center">
-                
-                {/* Decoración sutil detrás de la imagen (Brillo) */}
                 <div className="absolute inset-0 bg-terracotta/10 blur-3xl rounded-full transform scale-90" />
-                
-                {/* Imagen Completa - Sin recortes, flotando limpia */}
                 <img 
                   src={COURSE_IMAGE} 
                   alt="Clase de Reiki"
@@ -28,8 +22,6 @@ export function CoursesSection() {
                 />
             </FadeIn>
 
-            {/* --- COLUMNA TEXTO --- */}
-            {/* Ocupa 7 de 12 columnas en escritorio */}
             <div className="order-2 lg:order-1 lg:col-span-7 flex flex-col justify-center">
               
               <FadeIn delay={0.1}>
@@ -61,7 +53,6 @@ export function CoursesSection() {
               </div>
 
               <FadeIn delay={0.5}>
-                  {/* Tarjeta de detalles integrada con borde sutil */}
                   <div className="bg-white/60 rounded-2xl p-6 mb-8 border border-dark-brown/5 shadow-sm">
                       <h3 className="font-bold text-dark-brown text-sm uppercase tracking-widest mb-4 border-b border-dark-brown/10 pb-2">
                           Detalles del Curso
@@ -89,8 +80,9 @@ export function CoursesSection() {
 
                <FadeIn delay={0.6}>
                   <div className="flex flex-col sm:flex-row gap-5 items-center">
+                      {/* 👇 USO DE SITE_CONFIG AQUÍ */}
                       <a
-                      href="https://wa.me/56940616469?text=Hola! Me interesa inscribirme en el Curso de Reiki Usui"
+                      href={SITE_CONFIG.whatsappLink("Hola! Me interesa inscribirme en el Curso de Reiki Usui")}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full sm:w-auto text-center bg-terracotta text-cream font-sans uppercase tracking-widest text-sm px-8 py-4 rounded-full hover:bg-dark-brown transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"

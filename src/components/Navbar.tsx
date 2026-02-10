@@ -1,14 +1,7 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Menu, X } from "lucide-react"
-
-const navLinks = [
-  { href: "/", label: "Home", id: "home" },
-  { href: "/#about", label: "Sobre Mí", id: "about" },
-  { href: "/#terapias", label: "Terapias", id: "terapias" },
-  { href: "/#cursos", label: "Cursos", id: "cursos" },
-  { href: "/catalogo", label: "Catálogo", id: "catalogo" },
-]
+import { SITE_CONFIG } from "../config/site"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -16,12 +9,48 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState("home")
   const location = useLocation()
 
+  // --- 1. Transformar datos de SITE_CONFIG ---
+  const navItems = useMemo(() => {
+    return SITE_CONFIG.nav.map(item => {
+      let id = "home";
+      if (item.href === "/") id = "home";
+      else if (item.href.startsWith("/#")) id = item.href.replace("/#", "");
+      else if (item.href.startsWith("/")) id = item.href.replace("/", "");
+      
+      return { ...item, id };
+    });
+  }, []);
+
+  // --- NUEVA LÓGICA: SCROLL CRUZADO ENTRE PÁGINAS ---
+  // Este efecto detecta cuando cambias de página (ej: Catálogo -> Home) y tienes un #hash en la URL
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      
+      if (element) {
+        // Hacemos el scroll inmediatamente si el elemento ya está ahí
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100); // Pequeño delay para asegurar que la página cargó
+      }
+    } else if (location.pathname === '/' && !location.hash) {
+        // Si vamos al Home limpio ("/")
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [location]); // Se ejecuta cada vez que cambia la URL (Ruta o Hash)
+
+
+  // --- 2. Lógica de Scroll Spy (Solo activa en el Home) ---
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
 
       if (location.pathname === "/") {
-        const sections = navLinks.map(link => link.id).filter(id => id !== "home" && id !== "catalogo")
+        const sections = navItems
+            .filter(item => item.href.startsWith("/#"))
+            .map(item => item.id);
+
         let current = "home"
         
         if (window.scrollY < 100) {
@@ -44,32 +73,37 @@ export function Navbar() {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [location.pathname])
+  }, [location.pathname, navItems])
 
+  // --- 3. Detectar página activa (Para marcar en negrita "Catálogo") ---
   useEffect(() => {
-      if (location.pathname === '/catalogo') {
-          setActiveSection('catalogo')
-      } else if (location.pathname === '/' && window.scrollY < 100) {
-          setActiveSection('home')
+      const currentPathId = location.pathname.replace("/", "");
+      if (currentPathId && currentPathId !== "") {
+          setActiveSection(currentPathId);
       }
   }, [location.pathname])
 
+  // --- 4. Manejo de Clics MEJORADO ---
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
     
-    // Si es un ancla interna (ej: /#about)
-    if (href.startsWith("/#")) {
+    // CASO A: Estamos en el Home y hacemos click en una sección interna
+    if (location.pathname === "/" && href.startsWith("/#")) {
       const id = href.replace("/#", "");
       const element = document.getElementById(id);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
     } 
-    // Si es una ruta limpia (ej: / o /catalogo)
-    else {
-      // Forzamos el scroll al tope de la página
+    
+    // CASO B: Estamos en el Home y clicamos "Inicio"
+    else if (location.pathname === "/" && href === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    // CASO C: Estamos en OTRA página (ej: Catálogo).
+    // NO HACEMOS NADA AQUÍ. Dejamos que el <Link> cambie la URL.
+    // El "useEffect" de arriba (Lógica Scroll Cruzado) detectará el cambio y hará el scroll.
   };
 
   const logoClasses = "h-12 md:h-20 w-auto object-contain transition-all duration-500";
@@ -92,25 +126,25 @@ export function Navbar() {
           >
             <img
                 src="/images/logo-blanco.png" 
-                alt="Yo Soy Vida Logo Claro"
+                alt={`${SITE_CONFIG.name} Logo Claro`}
                 className={`${logoClasses} absolute top-0 left-0 ${isScrolled ? 'opacity-0' : 'opacity-100'}`}
             />
 
             <img
                 src="/images/logo-verde.png"
-                alt="Yo Soy Vida Logo Original"
+                alt={`${SITE_CONFIG.name} Logo Original`}
                 className={`${logoClasses} relative ${isScrolled ? 'opacity-100' : 'opacity-0'}`}
             />
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => {
+            {navItems.map((link) => {
               const isActive = activeSection === link.id
               return (
                 <Link
                   key={link.href}
-                  to={link.href}
+                  to={link.href} // El Link maneja la navegación a "/"
                   onClick={() => handleNavClick(link.href)}
                   className={`relative font-sans text-sm uppercase tracking-widest transition-colors duration-300 py-2 group ${
                     isActive 
@@ -118,7 +152,7 @@ export function Navbar() {
                       : isScrolled ? "text-dark-brown hover:text-earthy-brown" : "text-cream hover:text-white font-medium drop-shadow-sm"
                   }`}
                 >
-                  {link.label}
+                  {link.name}
                   <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-terracotta transform origin-left transition-transform duration-300 ${
                       isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-50"
                   }`} />
@@ -142,7 +176,7 @@ export function Navbar() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="absolute top-0 left-0 flex h-screen w-full flex-col items-center gap-8 bg-cream/95 pt-28 px-6 backdrop-blur-xl animate-fade-in md:hidden">
-          {navLinks.map((link) => (
+          {navItems.map((link) => (
             <Link
               key={link.href}
               to={link.href}
@@ -151,7 +185,7 @@ export function Navbar() {
                   activeSection === link.id ? "text-terracotta font-bold" : "text-dark-brown"
               }`}
             >
-              {link.label}
+              {link.name}
             </Link>
           ))}
         </div>

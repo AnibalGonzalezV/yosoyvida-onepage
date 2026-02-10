@@ -5,12 +5,10 @@ import { WaveDivider } from "./WaveDivider"
 import { topProducts, generalCatalog, type Product } from "../data/product"
 import { ProductModal } from "./ProductModal"
 import { FadeIn } from "./ui/FadeIn" 
+import { SITE_CONFIG } from "../config/site" // 👈 IMPORTAMOS LA CONFIG
 
 const BRAND_LOGO = "/images/cropped-Logo.png";
 const BOTTOM_WAVE = "M0,224L48,202.7C96,181,192,139,288,122.7C384,107,480,117,576,144C672,171,768,213,864,197.3C960,181,1056,107,1152,85.3C1248,64,1344,96,1392,112L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-const WHATSAPP_NUMBER = "56940616469" 
-
-// 👇 COLOR VERDE DEL LOGO
 const LOGO_GREEN = "text-[#607D68]";
 
 export function ProductsSection() {
@@ -43,7 +41,6 @@ export function ProductsSection() {
                 <span className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-wide opacity-90">
                 Medicina
                 </span>
-                {/* 👇 APLICADO EL COLOR VERDE AQUÍ */}
                 <span className={`font-cursive font-bold text-4xl md:text-5xl lg:text-6xl transform relative top-1 ${LOGO_GREEN}`}>
                 Natural
                 </span>
@@ -102,8 +99,10 @@ export function ProductsSection() {
                     {product.name}
                     </h3>
                     <p className="font-sans text-earthy-brown font-medium mb-4">{product.price}</p>
+                    
+                    {/* 👇 USO DE SITE_CONFIG AQUÍ */}
                     <a
-                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Me interesa el producto: ${product.name}`}
+                    href={SITE_CONFIG.whatsappLink(`Hola! Me interesa el producto: ${product.name}`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()} 

@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react"
 import { Star, Eye, Sparkles, BookOpen } from "lucide-react"
-import { FooterSection } from "../components/FooterSection"
 import { WaveDivider } from "../components/WaveDivider"
 import { ProductModal } from "../components/ProductModal" 
 import { topProducts, generalCatalog, type Product } from "../data/product"
 import { FadeIn } from "../components/ui/FadeIn"
+import { ImageWithSkeleton } from "../components/ui/ImageWithSkeleton"
+import { FooterSection } from "../components/FooterSection"
 
 const BRAND_LOGO = "/images/cropped-Logo.png";
 
@@ -36,10 +37,12 @@ function ProductCard({ product, onOpen }: CardProps) {
              </div>
         )}
 
-        <img
+        {/* 👇 2. AQUÍ ESTÁ LA MAGIA: Reemplazamos <img> por ImageWithSkeleton */}
+        <ImageWithSkeleton
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-contain p-5 group-hover:scale-105 transition-transform duration-700"
+          // Agregamos padding "p-5" y el efecto hover scale aquí en las clases
+          className="w-full h-full p-5 group-hover:scale-105 transition-transform duration-700"
         />
         
         {product.bestseller && (
@@ -55,7 +58,7 @@ function ProductCard({ product, onOpen }: CardProps) {
            </div>
         )}
         
-        <div className="absolute inset-0 bg-dark-brown/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1px]">
+        <div className="absolute inset-0 bg-dark-brown/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1px] z-20">
            <div className="bg-white text-dark-brown px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
              <Eye className="w-4 h-4" /> Ver Detalle
            </div>
@@ -85,6 +88,7 @@ function ProductCard({ product, onOpen }: CardProps) {
   )
 }
 
+// ... El resto del archivo (CatalogoPage) sigue igual ...
 export default function CatalogoPage() {
   const [filter, setFilter] = useState<'all' | 'product' | 'book'>('all');
   const [visibleCount, setVisibleCount] = useState(8); 
@@ -113,7 +117,7 @@ export default function CatalogoPage() {
   };
 
   return (
-    <main className="min-h-dvh bg-cream antialiased">
+    <main className="min-h-dvh bg-cream antialiased animate-fade-in">
       
       {/* HERO SECTION */}
       <section className="relative w-full h-[50vh] min-h-[400px] flex items-center justify-center">

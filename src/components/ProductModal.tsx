@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom"; 
 import { X, MessageCircle, Package, CheckCircle } from "lucide-react";
 import type { Product } from "../data/product";
+import { SITE_CONFIG } from "../config/site"; // 👈 IMPORTAR
 
 interface ProductModalProps {
   product: Product | null;
@@ -9,8 +10,7 @@ interface ProductModalProps {
   onClose: () => void;
 }
 
-const WHATSAPP_NUMBER = "56940616469";
-const BRAND_LOGO = "/images/cropped-Logo.png"; // Asegúrate de que esta ruta sea correcta
+const BRAND_LOGO = "/images/cropped-Logo.png"; 
 
 export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   const [mounted, setMounted] = useState(false);
@@ -45,7 +45,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
       {/* CONTENEDOR DEL MODAL */}
       <div className="relative bg-white rounded-2xl shadow-2xl w-[95%] md:w-full max-w-3xl max-h-[85vh] md:max-h-[90vh] overflow-hidden flex flex-col md:flex-row animate-scale-up z-[10000]">
         
-        {/* Botón Cerrar */}
         <button 
           onClick={onClose}
           className="absolute top-3 right-3 z-30 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-gray-100 transition-colors shadow-md border border-gray-100"
@@ -56,13 +55,11 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
         {/* COLUMNA IMAGEN */}
         <div className="w-full md:w-2/5 h-64 md:h-auto bg-[#F9F4EF] flex items-center justify-center p-6 shrink-0 relative group">
            
-           {/* LOGO MARCA (Sin recuadro, limpio y flotante) */}
            {product.type !== 'book' && (
              <div className="absolute top-4 left-4 z-20 pointer-events-none">
                 <img 
                   src={BRAND_LOGO} 
                   alt="Pro Natural" 
-                  // Tamaño w-16 h-16 (64px), sombra suave para resaltar sobre cualquier fondo
                   className="w-16 h-16 object-contain drop-shadow-md opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                 />
              </div>
@@ -75,7 +72,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
            />
         </div>
 
-        {/* COLUMNA INFO (Con Scroll) */}
+        {/* COLUMNA INFO */}
         <div className="w-full md:w-3/5 p-5 md:p-8 flex flex-col overflow-y-auto">
            
            <div className="border-b border-gray-100 pb-3 mb-4">
@@ -127,11 +124,12 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
            <div className="h-20 md:h-0"></div>
 
-           {/* --- BOTÓN FLOTANTE (Fix para iPhone) --- */}
-           {/* pb-8 extra para móviles */}
+           {/* --- BOTÓN FLOTANTE --- */}
            <div className="md:relative fixed bottom-0 left-0 right-0 md:bottom-auto md:left-auto md:right-auto p-4 pb-8 md:p-0 bg-white md:bg-transparent border-t md:border-t-0 border-gray-100 md:mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-none z-10">
+             
+             {/* 👇 USO DE SITE_CONFIG AQUÍ */}
              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Me interesa: ${product.name}`}
+                href={SITE_CONFIG.whatsappLink(`Hola! Me interesa: ${product.name}`)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-[#25D366] text-white font-medium py-3 rounded-xl hover:bg-[#128C7E] transition-colors w-full shadow-lg active:scale-95"
