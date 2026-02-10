@@ -1,7 +1,7 @@
 import { MessageCircle, Dna, Zap, ClipboardList, Activity } from "lucide-react"
 import { FadeIn } from "./ui/FadeIn"
 
-// Definimos el color verde boho para usarlo consistentemente
+// Definimos el color verde boho para usarlo consistentemente en los textos del cuerpo
 const GREEN_ACCENT = "text-[#607D68]"; 
 const GREEN_BG = "bg-[#607D68]";
 const GREEN_BORDER = "border-[#607D68]";
@@ -65,7 +65,8 @@ export function PillarsSection() {
         <div className="max-w-4xl mx-auto text-center mb-16">
             <FadeIn>
                 <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-dark-brown mb-8 leading-tight tracking-wide drop-shadow-sm">
-                    TERAPIA <span className={`italic ${GREEN_ACCENT}`}>INTEGRAL</span>
+                    {/* CAMBIO: Se reemplazó GREEN_ACCENT por text-terracotta para igualar a "raíz" */}
+                    TERAPIA <span className="italic text-terracotta">INTEGRAL</span>
                 </h2>
             </FadeIn>
 
@@ -92,11 +93,6 @@ export function PillarsSection() {
                             alt="Energía vital" 
                             className="w-full h-full object-cover transition-transform duration-1000 scale-105 group-hover:scale-110"
                         />
-                        {/* CAMBIO AQUÍ: Filtro verdoso/oscuro mucho más sutil.
-                           - Antes: from-dark-brown/95 via-[#4A5D4E]/80
-                           - Ahora: from-dark-brown/70 via-[#4A5D4E]/50
-                           Esto permite que la imagen de fondo se vea más clara.
-                        */}
                         <div className="absolute inset-0 bg-gradient-to-t from-dark-brown/70 via-[#4A5D4E]/50 to-transparent mix-blend-multiply"></div>
                     </div>
 
@@ -124,7 +120,6 @@ export function PillarsSection() {
             {leftPillars.map((pillar, index) => (
               <FadeIn key={pillar.id} delay={0.4 + (index * 0.1)} direction="right"> 
                   <div className="flex flex-col items-center lg:items-end text-center lg:text-right group">
-                    {/* Icono con fondo VERDE */}
                     <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full ${GREEN_BG} text-cream mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                       <pillar.icon className="w-6 h-6" />
                     </div>
@@ -144,9 +139,7 @@ export function PillarsSection() {
           {/* COLUMNA CENTRAL (IMAGEN PIES) */}
           <div className="order-1 lg:order-2 flex justify-center h-full py-8 lg:py-0 relative z-0">
               <FadeIn direction="up" delay={0.2} className="relative w-full max-w-[350px] lg:max-w-full h-full flex items-center justify-center">
-                  {/* Fondo sutil VERDE detrás */}
                   <div className="absolute inset-0 bg-[#607D68]/10 rounded-full blur-3xl transform scale-90" />
-                  
                   <img
                     src={FEET_IMAGE} 
                     alt="Conexión con la tierra"
@@ -160,7 +153,6 @@ export function PillarsSection() {
             {rightPillars.map((pillar, index) => (
               <FadeIn key={pillar.id} delay={0.5 + (index * 0.1)} direction="left"> 
                   <div className="flex flex-col items-center lg:items-start text-center lg:text-left group">
-                    {/* Icono con fondo VERDE */}
                     <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full ${GREEN_BG} text-cream mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                       <pillar.icon className="w-6 h-6" />
                     </div>
