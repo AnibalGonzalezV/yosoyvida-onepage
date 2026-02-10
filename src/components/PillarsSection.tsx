@@ -51,7 +51,7 @@ const pillars = [
 ]
 
 const FEET_IMAGE = "/images/pillars-photo.webp"; 
-const BOVIS_BG = "/images/bovis.webp";
+const BOVIS_BG = "/images/new-bovis.webp";
 
 export function PillarsSection() {
   const leftPillars = pillars.slice(0, 2);

@@ -19,7 +19,7 @@ export function FooterSection({ topWaveColor = "text-[#E8DED5]" }: FooterSection
       <div className="relative min-h-[450px] md:min-h-[550px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
              <img
-              src="/images/footer-nature.jpg"
+              src="/images/new-footer.jpeg"
               alt="Peaceful nature scene"
               className="w-full h-full object-cover"
             />
