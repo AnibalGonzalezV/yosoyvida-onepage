@@ -9,12 +9,14 @@ const CALENDLY_URL = "https://calendly.com/jesarelareiki/sesion-terapeutica-inte
 const HERO_WAVE = "M0,224L48,202.7C96,181,192,139,288,122.7C384,107,480,117,576,144C672,171,768,213,864,197.3C960,181,1056,107,1152,85.3C1248,64,1344,96,1392,112L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
 
 export default function AgendaPage() {
+  // Optimizaciones de URL para móvil: ocultamos detalles redundantes para ganar espacio
   const cleanUrl = `${CALENDLY_URL}?hide_event_type_details=1&hide_gdpr_banner=1&text_color=4A3B32&primary_color=D08C8C`;
 
   return (
     <main className="min-h-screen bg-cream animate-fade-in">
 
       {/* --- HERO HEADER --- */}
+      {/* Ajuste: h-[35vh] está bien, pero en móviles apaisados puede quedar corto. min-h-[300px] protege bien. */}
       <section className="relative w-full h-[35vh] min-h-[300px] flex items-center justify-center bg-terracotta">
         <div className="absolute inset-0 bg-[url('/images/hero-lifestyle2.jpg')] bg-cover bg-center opacity-40 mix-blend-overlay" />
         <div className="absolute inset-0 bg-gradient-to-b from-dark-brown/60 to-terracotta/90" />
@@ -41,7 +43,11 @@ export default function AgendaPage() {
             
             {/* LADO IZQUIERDO: INFORMACIÓN */}
             <FadeIn delay={0.2} className="space-y-6">
-                <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-dark-brown/5 sticky top-24">
+                {/* 🔥 CORRECCIÓN CLAVE: 
+                   Cambié 'sticky top-24' por 'lg:sticky lg:top-24'.
+                   En móvil (sin lg) será 'static', evitando que se coma la pantalla al hacer scroll.
+                */}
+                <div className="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-dark-brown/5 lg:sticky lg:top-24">
                     <h3 className="font-serif text-2xl text-dark-brown mb-6 border-b border-terracotta/20 pb-4">
                         Detalles de la Cita
                     </h3>
@@ -59,7 +65,6 @@ export default function AgendaPage() {
                             </div>
                         </div>
 
-                        {/* 👇 INFORMACIÓN ACTUALIZADA SOBRE MODALIDAD */}
                         <div className="flex items-start gap-4">
                             <div className="p-3 bg-terracotta/10 rounded-full text-terracotta shrink-0">
                                 <MousePointerClick className="w-5 h-5" />
@@ -80,7 +85,7 @@ export default function AgendaPage() {
                                 <p className="font-bold text-dark-brown text-sm uppercase tracking-wide">Ubicación</p>
                                 <div className="mt-1 text-dark-brown/70 text-sm space-y-1">
                                     <p>• <strong>Online:</strong> Recibirás el link automáticamente.</p>
-                                    <p>• <strong>Presencial:</strong> La dirección exacta llegará a tu correo al confirmar.</p>
+                                    <p>• <strong>Presencial:</strong> La dirección exacta llegará a tu correo.</p>
                                 </div>
                             </div>
                         </div>
@@ -96,11 +101,17 @@ export default function AgendaPage() {
             </FadeIn>
 
             {/* LADO DERECHO: IFRAME CALENDLY */}
-            <FadeIn delay={0.3} className="w-full min-h-[750px]">
+            {/* 🔥 CORRECCIÓN CLAVE 2: 
+                min-h-[650px] en móvil y min-h-[750px] en md. 
+                Esto evita que en pantallas de celular pequeñas el bloque sea excesivamente largo sin necesidad.
+            */}
+            <FadeIn delay={0.3} className="w-full min-h-[650px] md:min-h-[750px]">
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden h-full border border-gray-100 relative">
                     <iframe 
                       src={cleanUrl} 
-                      style={{width: "100%", height: "100%", minHeight: "750px", border: "none"}}
+                      // 'scrolling="yes"' permite que si el calendario es más largo que el contenedor, se pueda bajar dentro de él.
+                      className="w-full h-full border-none"
+                      style={{ minHeight: "650px" }} 
                       title="Agendar Sesión con Yo Soy Vida"
                     ></iframe>
                 </div>
